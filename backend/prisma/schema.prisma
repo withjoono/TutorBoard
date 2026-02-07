@@ -1,0 +1,222 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  teacher
+  parent
+  student
+}
+
+enum SubmissionStatus {
+  pending
+  submitted
+  graded
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  overdue
+}
+
+enum NotificationType {
+  assignment
+  test
+  payment
+  general
+}
+
+model TbUser {
+  id         String   @id @default(uuid())
+  hubUserId  Int?     @unique @map("hub_user_id")
+  username   String
+  email      String   @unique
+  role       UserRole
+  phone      String?
+  avatarUrl  String?  @map("avatar_url")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  teacherClasses       TbClass[]
+  studentEnrollments   TbClassEnrollment[] @relation("StudentEnrollments")
+  parentEnrollments    TbClassEnrollment[] @relation("ParentEnrollments")
+  submissions          TbAssignmentSubmission[]
+  testResults          TbTestResult[]
+  studentPayments      TbPayment[]
+  notifications        TbNotification[]
+  badges               TbStudentBadge[]
+
+  @@map("tb_users")
+}
+
+model TbClass {
+  id          String   @id @default(uuid())
+  teacherId   String   @map("teacher_id")
+  name        String
+  description String?
+  inviteCode  String   @unique @map("invite_code")
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  teacher     TbUser         @relation(fields: [teacherId], references: [id])
+  enrollments TbClassEnrollment[]
+  lessonPlans TbLessonPlan[]
+  payments    TbPayment[]
+
+  @@map("tb_classes")
+}
+
+model TbClassEnrollment {
+  id         String   @id @default(uuid())
+  classId    String   @map("class_id")
+  studentId  String   @map("student_id")
+  parentId   String?  @map("parent_id")
+  enrolledAt DateTime @default(now()) @map("enrolled_at")
+
+  // Relations
+  class   TbClass @relation(fields: [classId], references: [id])
+  student TbUser  @relation("StudentEnrollments", fields: [studentId], references: [id])
+  parent  TbUser? @relation("ParentEnrollments", fields: [parentId], references: [id])
+
+  @@unique([classId, studentId])
+  @@map("tb_class_enrollments")
+}
+
+model TbLessonPlan {
+  id            String   @id @default(uuid())
+  classId       String   @map("class_id")
+  title         String
+  description   String?
+  scheduledDate DateTime? @map("scheduled_date")
+  progress      Int      @default(0)
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  class       TbClass        @relation(fields: [classId], references: [id])
+  assignments TbAssignment[]
+  tests       TbTest[]
+
+  @@map("tb_lesson_plans")
+}
+
+model TbAssignment {
+  id          String   @id @default(uuid())
+  lessonId    String   @map("lesson_id")
+  title       String
+  description String?
+  dueDate     DateTime? @map("due_date")
+  fileUrl     String?  @map("file_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  lesson      TbLessonPlan          @relation(fields: [lessonId], references: [id])
+  submissions TbAssignmentSubmission[]
+
+  @@map("tb_assignments")
+}
+
+model TbAssignmentSubmission {
+  id                String           @id @default(uuid())
+  assignmentId      String           @map("assignment_id")
+  studentId         String           @map("student_id")
+  submissionFileUrl String?          @map("submission_file_url")
+  feedback          String?
+  grade             Int?
+  status            SubmissionStatus @default(pending)
+  submittedAt       DateTime         @default(now()) @map("submitted_at")
+
+  // Relations
+  assignment TbAssignment @relation(fields: [assignmentId], references: [id])
+  student    TbUser       @relation(fields: [studentId], references: [id])
+
+  @@unique([assignmentId, studentId])
+  @@map("tb_assignment_submissions")
+}
+
+model TbTest {
+  id          String   @id @default(uuid())
+  lessonId    String   @map("lesson_id")
+  title       String
+  description String?
+  testDate    DateTime? @map("test_date")
+  maxScore    Int      @map("max_score")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  lesson  TbLessonPlan   @relation(fields: [lessonId], references: [id])
+  results TbTestResult[]
+
+  @@map("tb_tests")
+}
+
+model TbTestResult {
+  id       String   @id @default(uuid())
+  testId   String   @map("test_id")
+  studentId String  @map("student_id")
+  score    Int
+  feedback String?
+  takenAt  DateTime @default(now()) @map("taken_at")
+
+  // Relations
+  test    TbTest @relation(fields: [testId], references: [id])
+  student TbUser @relation(fields: [studentId], references: [id])
+
+  @@unique([testId, studentId])
+  @@map("tb_test_results")
+}
+
+model TbPayment {
+  id         String        @id @default(uuid())
+  classId    String        @map("class_id")
+  studentId  String        @map("student_id")
+  amount     Decimal
+  dueDate    DateTime      @map("due_date")
+  paidDate   DateTime?     @map("paid_date")
+  status     PaymentStatus @default(pending)
+  receiptUrl String?       @map("receipt_url")
+  createdAt  DateTime      @default(now()) @map("created_at")
+
+  // Relations
+  class   TbClass @relation(fields: [classId], references: [id])
+  student TbUser  @relation(fields: [studentId], references: [id])
+
+  @@map("tb_payments")
+}
+
+model TbNotification {
+  id      String           @id @default(uuid())
+  userId  String           @map("user_id")
+  message String
+  type    NotificationType @default(general)
+  read    Boolean          @default(false)
+  sentAt  DateTime         @default(now()) @map("sent_at")
+
+  // Relations
+  user TbUser @relation(fields: [userId], references: [id])
+
+  @@map("tb_notifications")
+}
+
+model TbStudentBadge {
+  id        String   @id @default(uuid())
+  studentId String   @map("student_id")
+  badgeType String   @map("badge_type")
+  badgeName String   @map("badge_name")
+  earnedAt  DateTime @default(now()) @map("earned_at")
+
+  // Relations
+  student TbUser @relation(fields: [studentId], references: [id])
+
+  @@map("tb_student_badges")
+}
