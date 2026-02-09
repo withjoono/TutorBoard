@@ -12,6 +12,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"] || "postgresql://tsuser:tsuser1234@localhost:5432/tutorboard?schema=public",
+    url: process.env["DATABASE_URL"] || "postgresql://tsuser:tsuser1234@localhost:5432/geobukschool_dev?schema=public",
   },
 });
