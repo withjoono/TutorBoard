@@ -10,6 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===== ENUMS =====
+
 enum UserRole {
   teacher
   parent
@@ -32,8 +34,18 @@ enum NotificationType {
   assignment
   test
   payment
+  attendance
+  comment
   general
 }
+
+enum AttendanceStatus {
+  present
+  late
+  absent
+}
+
+// ===== USERS =====
 
 model TbUser {
   id         String   @id @default(uuid())
@@ -54,9 +66,15 @@ model TbUser {
   studentPayments      TbPayment[]
   notifications        TbNotification[]
   badges               TbStudentBadge[]
+  attendances          TbAttendance[]
+  sentComments         TbPrivateComment[]    @relation("CommentAuthor")
+  receivedComments     TbPrivateComment[]    @relation("CommentTarget")
+  sentMessages         TbMessage[]
 
   @@map("tb_users")
 }
+
+// ===== CLASSES =====
 
 model TbClass {
   id          String   @id @default(uuid())
@@ -73,6 +91,7 @@ model TbClass {
   enrollments TbClassEnrollment[]
   lessonPlans TbLessonPlan[]
   payments    TbPayment[]
+  attendances TbAttendance[]
 
   @@map("tb_classes")
 }
@@ -93,6 +112,8 @@ model TbClassEnrollment {
   @@map("tb_class_enrollments")
 }
 
+// ===== LESSON PLANS & RECORDS =====
+
 model TbLessonPlan {
   id            String   @id @default(uuid())
   classId       String   @map("class_id")
@@ -103,12 +124,51 @@ model TbLessonPlan {
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   // Relations
-  class       TbClass        @relation(fields: [classId], references: [id])
+  class       TbClass          @relation(fields: [classId], references: [id])
   assignments TbAssignment[]
   tests       TbTest[]
+  records     TbLessonRecord[]
 
   @@map("tb_lesson_plans")
 }
+
+model TbLessonRecord {
+  id           String   @id @default(uuid())
+  lessonPlanId String   @map("lesson_plan_id")
+  recordDate   DateTime @map("record_date")
+  summary      String?
+  pagesFrom    Int?     @map("pages_from")
+  pagesTo      Int?     @map("pages_to")
+  conceptNote  String?  @map("concept_note")
+  fileUrl      String?  @map("file_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // Relations
+  lessonPlan TbLessonPlan @relation(fields: [lessonPlanId], references: [id])
+
+  @@map("tb_lesson_records")
+}
+
+// ===== ATTENDANCE =====
+
+model TbAttendance {
+  id        String           @id @default(uuid())
+  classId   String           @map("class_id")
+  studentId String           @map("student_id")
+  date      DateTime
+  status    AttendanceStatus @default(present)
+  note      String?
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  // Relations
+  class   TbClass @relation(fields: [classId], references: [id])
+  student TbUser  @relation(fields: [studentId], references: [id])
+
+  @@unique([classId, studentId, date])
+  @@map("tb_attendances")
+}
+
+// ===== ASSIGNMENTS =====
 
 model TbAssignment {
   id          String   @id @default(uuid())
@@ -144,6 +204,8 @@ model TbAssignmentSubmission {
   @@map("tb_assignment_submissions")
 }
 
+// ===== TESTS =====
+
 model TbTest {
   id          String   @id @default(uuid())
   lessonId    String   @map("lesson_id")
@@ -161,12 +223,13 @@ model TbTest {
 }
 
 model TbTestResult {
-  id       String   @id @default(uuid())
-  testId   String   @map("test_id")
-  studentId String  @map("student_id")
-  score    Int
-  feedback String?
-  takenAt  DateTime @default(now()) @map("taken_at")
+  id              String   @id @default(uuid())
+  testId          String   @map("test_id")
+  studentId       String   @map("student_id")
+  score           Int
+  feedback        String?
+  wrongAnswerNote String?  @map("wrong_answer_note")
+  takenAt         DateTime @default(now()) @map("taken_at")
 
   // Relations
   test    TbTest @relation(fields: [testId], references: [id])
@@ -175,6 +238,8 @@ model TbTestResult {
   @@unique([testId, studentId])
   @@map("tb_test_results")
 }
+
+// ===== PAYMENTS =====
 
 model TbPayment {
   id         String        @id @default(uuid())
@@ -194,19 +259,80 @@ model TbPayment {
   @@map("tb_payments")
 }
 
+// ===== NOTIFICATIONS =====
+
 model TbNotification {
-  id      String           @id @default(uuid())
-  userId  String           @map("user_id")
-  message String
-  type    NotificationType @default(general)
-  read    Boolean          @default(false)
-  sentAt  DateTime         @default(now()) @map("sent_at")
+  id            String           @id @default(uuid())
+  userId        String           @map("user_id")
+  message       String
+  type          NotificationType @default(general)
+  read          Boolean          @default(false)
+  referenceId   String?          @map("reference_id")
+  referenceType String?          @map("reference_type")
+  sentAt        DateTime         @default(now()) @map("sent_at")
 
   // Relations
   user TbUser @relation(fields: [userId], references: [id])
 
   @@map("tb_notifications")
 }
+
+// ===== PRIVATE COMMENTS (Teacher <-> Parent) =====
+
+model TbPrivateComment {
+  id          String   @id @default(uuid())
+  authorId    String   @map("author_id")
+  targetId    String   @map("target_id")
+  studentId   String?  @map("student_id")
+  contextType String?  @map("context_type")
+  contextId   String?  @map("context_id")
+  content     String
+  imageUrl    String?  @map("image_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  author TbUser @relation("CommentAuthor", fields: [authorId], references: [id])
+  target TbUser @relation("CommentTarget", fields: [targetId], references: [id])
+
+  @@map("tb_private_comments")
+}
+
+// ===== MESSAGING (Teacher <-> Parent Conversations) =====
+
+model TbConversation {
+  id        String   @id @default(uuid())
+  teacherId String   @map("teacher_id")
+  parentId  String   @map("parent_id")
+  studentId String?  @map("student_id")
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  messages TbMessage[]
+
+  @@unique([teacherId, parentId, studentId])
+  @@map("tb_conversations")
+}
+
+model TbMessage {
+  id             String   @id @default(uuid())
+  conversationId String   @map("conversation_id")
+  senderId       String   @map("sender_id")
+  content        String
+  contextType    String?  @map("context_type")
+  contextId      String?  @map("context_id")
+  read           Boolean  @default(false)
+  sentAt         DateTime @default(now()) @map("sent_at")
+
+  // Relations
+  conversation TbConversation @relation(fields: [conversationId], references: [id])
+  sender       TbUser         @relation(fields: [senderId], references: [id])
+
+  @@map("tb_messages")
+}
+
+// ===== BADGES =====
 
 model TbStudentBadge {
   id        String   @id @default(uuid())

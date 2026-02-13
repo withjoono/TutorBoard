@@ -9,6 +9,8 @@ import { AssignmentsModule } from './assignments/assignments.module';
 import { TestsModule } from './tests/tests.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { TeacherModule } from './teacher/teacher.module';
+import { ParentModule } from './parent/parent.module';
 
 @Module({
   imports: [
@@ -20,8 +22,11 @@ import { NotificationsModule } from './notifications/notifications.module';
     TestsModule,
     DashboardModule,
     NotificationsModule,
+    TeacherModule,
+    ParentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule { }
+

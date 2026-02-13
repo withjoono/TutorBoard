@@ -16,6 +16,20 @@ export function isLoggedIn(): boolean {
     return !!localStorage.getItem('accessToken');
 }
 
+export function getUserInfo(): { id: string; role: string; username: string; email: string } | null {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return { id: payload.sub || payload.id, role: payload.role, username: payload.username || '', email: payload.email || '' };
+    } catch { return null; }
+}
+
+export function getUserRole(): 'teacher' | 'parent' | 'student' | null {
+    const info = getUserInfo();
+    return info?.role as any || null;
+}
+
 export async function processSSOLogin(): Promise<boolean> {
     const params = new URLSearchParams(window.location.search);
     const ssoCode = params.get('sso_code');

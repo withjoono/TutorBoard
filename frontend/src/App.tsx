@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from 'react'
-import { processSSOLogin, isLoggedIn, redirectToLogin, logout } from './lib/auth'
+import { processSSOLogin, isLoggedIn, redirectToLogin, logout, getUserRole } from './lib/auth'
 import { api } from './lib/api'
 import { hubApi } from './lib/hub-api'
+import TeacherDashboard from './TeacherDashboard'
+import ParentDashboard from './ParentDashboard'
 import './index.css'
 
 // ===== TYPES =====
@@ -1348,12 +1350,15 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(isLoggedIn())
   const [showBanner, setShowBanner] = useState(true)
   const [loginModalMessage, setLoginModalMessage] = useState<string | null>(null)
+  const [userRole, setUserRole] = useState<'teacher' | 'parent' | 'student' | null>(getUserRole())
 
   // SSO 코드가 있으면 백그라운드로 처리 (화면 차단 없음)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (params.has('sso_code')) {
-      processSSOLogin().then((ok) => { if (ok) setLoggedIn(true) })
+      processSSOLogin().then((ok) => {
+        if (ok) { setLoggedIn(true); setUserRole(getUserRole()) }
+      })
     }
   }, [])
 
@@ -1381,40 +1386,61 @@ function App() {
         />
       )}
 
-      {/* Navbar */}
+      {/* Top Navigation Bar */}
       <nav className="navbar">
-        <a className="navbar-brand" href="/">
-          <span className="logo-icon">🎓</span>
-          TutorBoard
-        </a>
+        <div className="navbar-left">
+          <a className="navbar-brand" href="/">
+            <span className="logo-icon">🎓</span>
+            TutorBoard
+          </a>
+        </div>
+
+        <div className="navbar-center">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`nav-link ${activeTab === tab.id && !showLinkage ? 'active' : ''}`}
+              onClick={() => { setActiveTab(tab.id); setShowLinkage(false) }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
         <div className="navbar-actions">
+          <button
+            className="navbar-icon-btn"
+            onClick={() => {
+              if (!loggedIn) { redirectToLogin(); return }
+              setShowLinkage(false); setActiveTab('notifications')
+            }}
+            title="알림"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
+            {loggedIn && unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
+          </button>
+          <button
+            className="navbar-icon-btn"
+            onClick={() => {
+              if (!loggedIn) { redirectToLogin(); return }
+              setShowLinkage(!showLinkage); if (showLinkage) setActiveTab('home')
+            }}
+            title="계정 공유"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
+          </button>
           {loggedIn ? (
-            <>
-              <button
-                className="notification-btn"
-                onClick={() => { setShowLinkage(!showLinkage); if (showLinkage) setActiveTab('home') }}
-                title="계정 공유"
-                style={{ position: 'relative' }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
-              </button>
-              <button className="notification-btn" onClick={() => { setShowLinkage(false); setActiveTab('notifications') }}>
-                🔔
-                {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
-              </button>
-              <button
-                className="notification-btn"
-                onClick={() => { if (confirm('로그아웃 하시겠습니까?')) { logout(); setLoggedIn(false) } }}
-                title="로그아웃"
-              >
-                🔓
-              </button>
-            </>
+            <button
+              className="navbar-icon-btn"
+              onClick={() => { if (confirm('로그아웃 하시겠습니까?')) { logout(); setLoggedIn(false) } }}
+              title="로그아웃"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+            </button>
           ) : (
             <button
-              className="btn btn-outline"
+              className="btn-nav-login"
               onClick={() => redirectToLogin()}
-              style={{ fontSize: '0.8rem', padding: '8px 16px' }}
             >
               로그인
             </button>
@@ -1426,6 +1452,10 @@ function App() {
       <main className="main-content">
         {showLinkage && loggedIn ? (
           <AccountLinkagePage />
+        ) : loggedIn && userRole === 'teacher' ? (
+          <TeacherDashboard />
+        ) : loggedIn && userRole === 'parent' ? (
+          <ParentDashboard />
         ) : (
           <>
             {activeTab === 'home' && (loggedIn ? <DashboardPage /> : <PromoPage />)}
@@ -1436,19 +1466,7 @@ function App() {
         )}
       </main>
 
-      {/* Bottom Tabs */}
-      <div className="bottom-tabs">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`tab-item ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => { setActiveTab(tab.id); setShowLinkage(false) }}
-          >
-            <span className="tab-icon">{tab.icon}</span>
-            {tab.label}
-          </button>
-        ))}
-      </div>
+
     </>
   )
 }
