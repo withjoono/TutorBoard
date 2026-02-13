@@ -1,0 +1,27 @@
+runtime: nodejs22
+instance_class: F2
+service: tutorboard-backend
+entrypoint: node dist/main.js
+
+env_variables:
+  NODE_ENV: "production"
+  PORT: "8080"
+  DATABASE_URL: "postgresql://tsuser:tsuser1234@localhost:5432/geobukschool_prod?host=/cloudsql/ts-back-nest-479305:asia-northeast3:geobuk-db"
+  JWT_SECRET: "04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1"
+  HUB_API_URL: "https://ts-back-nest-479305.du.r.appspot.com"
+  SERVICE_ID: "tutorboard"
+  FRONTEND_URL: "https://tutorboard-front.web.app"
+
+beta_settings:
+  cloud_sql_instances: "ts-back-nest-479305:asia-northeast3:geobuk-db"
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 3
+  target_cpu_utilization: 0.65
+  target_throughput_utilization: 0.65
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always

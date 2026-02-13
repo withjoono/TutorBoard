@@ -11,13 +11,15 @@ async function bootstrap() {
       'http://localhost:3005', // 학생 앱
       'http://localhost:3006', // 학부모 앱
       'http://localhost:3007', // 선생님 앱 (예정)
+      'https://tutorboard-front.web.app', // 프로덕션
+      'https://tutorboard-front.firebaseapp.com', // 프로덕션 (대체)
     ],
     credentials: true,
   });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  const PORT = 4005;
+  const PORT = process.env.PORT || 4005;
   await app.listen(PORT);
   console.log(`🚀 TutorBoard Backend running on http://localhost:${PORT}`);
 }

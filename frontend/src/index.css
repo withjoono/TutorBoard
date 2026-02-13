@@ -1759,3 +1759,342 @@ body {
 .cal-day-event:hover {
   cursor: pointer;
 }
+
+/* ===== LOGIN BANNER ===== */
+.login-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  font-size: 0.85rem;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.login-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.login-banner-icon {
+  font-size: 1.1rem;
+}
+
+.login-banner-text {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.login-banner-cta {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 99px;
+  padding: 6px 18px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.login-banner-cta:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.login-banner-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.login-banner-close:hover {
+  color: #fff;
+}
+
+/* Push navbar below banner */
+.login-banner+.navbar {
+  top: 0;
+}
+
+/* ===== LOGIN MODAL ===== */
+.login-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.login-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.login-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.login-modal-close:hover {
+  color: var(--text-bright);
+}
+
+.login-modal-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.login-modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.login-modal-message {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-secondary);
+}
+
+/* ===== PROMO PAGE ===== */
+.promo-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 60px);
+  padding: 0 20px;
+  overflow-x: hidden;
+}
+
+.promo-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 0 40px;
+  max-width: 600px;
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.promo-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, rgba(61, 0, 18, 0.08), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(61, 0, 18, 0.15);
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary-light);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease 0.1s both;
+}
+
+.promo-hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text-bright);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.promo-hero-accent {
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.promo-hero-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+.promo-hero .btn-login {
+  animation: fadeInUp 0.8s ease 0.4s both;
+  font-size: 1.05rem;
+  padding: 16px 40px;
+}
+
+/* Feature Cards */
+.promo-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  width: 100%;
+  padding: 20px 0 40px;
+  animation: fadeInUp 0.8s ease 0.5s both;
+}
+
+.promo-feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+}
+
+.promo-feature-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-active);
+  box-shadow: 0 12px 40px rgba(61, 0, 18, 0.12);
+}
+
+.promo-feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.promo-feature-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.promo-feature-desc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Promo Footer */
+.promo-footer {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Responsive - Promo */
+@media (max-width: 768px) {
+  .promo-hero-title {
+    font-size: 1.7rem;
+  }
+
+  .promo-hero-description {
+    font-size: 0.9rem;
+  }
+
+  .promo-hero-description br {
+    display: none;
+  }
+
+  .promo-features {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .promo-feature-card {
+    padding: 22px 20px;
+  }
+}

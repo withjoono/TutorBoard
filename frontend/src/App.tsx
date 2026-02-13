@@ -1245,6 +1245,100 @@ function AccountLinkagePage() {
   )
 }
 
+// ===== LOGIN BANNER =====
+
+function LoginBanner({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="login-banner">
+      <div className="login-banner-content">
+        <span className="login-banner-icon">🎓</span>
+        <span className="login-banner-text">
+          로그인하면 학생, 선생님, 학부모가 함께 하는 수업 관리가 가능합니다
+        </span>
+        <button className="login-banner-cta" onClick={() => redirectToLogin()}>로그인</button>
+      </div>
+      <button className="login-banner-close" onClick={onClose} aria-label="닫기">✕</button>
+    </div>
+  )
+}
+
+// ===== LOGIN MODAL =====
+
+function LoginModal({ message, onClose }: { message: string; onClose: () => void }) {
+  return (
+    <div className="login-modal-overlay" onClick={onClose}>
+      <div className="login-modal" onClick={e => e.stopPropagation()}>
+        <button className="login-modal-close" onClick={onClose}>✕</button>
+        <div className="login-modal-icon">🔐</div>
+        <h3 className="login-modal-title">로그인이 필요합니다</h3>
+        <p className="login-modal-message">{message}</p>
+        <button className="btn btn-login" onClick={() => redirectToLogin()} style={{ width: '100%', marginTop: 16 }}>
+          🚀 로그인하기
+        </button>
+        <button className="btn btn-ghost" onClick={onClose} style={{ width: '100%', marginTop: 8 }}>
+          계속 둘러보기
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ===== PROMO PAGE =====
+
+function PromoPage() {
+  return (
+    <div className="promo-page">
+      {/* Hero Section */}
+      <section className="promo-hero">
+        <div className="promo-hero-badge">🎓 학생 전용 학습 플랫폼</div>
+        <h1 className="promo-hero-title">
+          나의 수업,
+          <br />
+          <span className="promo-hero-accent">한눈에 관리하세요</span>
+        </h1>
+        <p className="promo-hero-description">
+          TutorBoard와 함께 수업 일정, 과제, 성적을 체계적으로 관리하고
+          <br />
+          선생님·학부모와 실시간으로 소통하세요.
+        </p>
+        <button className="btn btn-login" onClick={() => redirectToLogin()}>
+          🚀 시작하기
+        </button>
+      </section>
+
+      {/* Features Section */}
+      <section className="promo-features">
+        <div className="promo-feature-card">
+          <div className="promo-feature-icon">📅</div>
+          <h3 className="promo-feature-title">수업 일정 관리</h3>
+          <p className="promo-feature-desc">
+            월별·주별·일별 캘린더로 모든 수업 일정을 확인하고 관리합니다.
+          </p>
+        </div>
+        <div className="promo-feature-card">
+          <div className="promo-feature-icon">📝</div>
+          <h3 className="promo-feature-title">과제 & 성적 추적</h3>
+          <p className="promo-feature-desc">
+            과제 제출 현황과 성적 피드백을 실시간으로 확인할 수 있습니다.
+          </p>
+        </div>
+        <div className="promo-feature-card">
+          <div className="promo-feature-icon">💬</div>
+          <h3 className="promo-feature-title">선생님·학부모 소통</h3>
+          <p className="promo-feature-desc">
+            수업별 코멘트와 계정 연동으로 원활한 소통이 가능합니다.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <div className="promo-footer">
+        <p>© 2026 TutorBoard. 더 나은 학습을 위한 첫 걸음.</p>
+      </div>
+    </div>
+  )
+}
+
 // ===== MAIN APP =====
 type TabId = 'home' | 'classes' | 'assignments' | 'notifications'
 
@@ -1252,6 +1346,8 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabId>('home')
   const [showLinkage, setShowLinkage] = useState(false)
   const [loggedIn, setLoggedIn] = useState(isLoggedIn())
+  const [showBanner, setShowBanner] = useState(true)
+  const [loginModalMessage, setLoginModalMessage] = useState<string | null>(null)
 
   // SSO 코드가 있으면 백그라운드로 처리 (화면 차단 없음)
   useEffect(() => {
@@ -1272,6 +1368,19 @@ function App() {
 
   return (
     <>
+      {/* Login Banner (비로그인 시) */}
+      {!loggedIn && showBanner && (
+        <LoginBanner onClose={() => setShowBanner(false)} />
+      )}
+
+      {/* Login Modal */}
+      {loginModalMessage && (
+        <LoginModal
+          message={loginModalMessage}
+          onClose={() => setLoginModalMessage(null)}
+        />
+      )}
+
       {/* Navbar */}
       <nav className="navbar">
         <a className="navbar-brand" href="/">
@@ -1279,33 +1388,35 @@ function App() {
           TutorBoard
         </a>
         <div className="navbar-actions">
-          <button
-            className="notification-btn"
-            onClick={() => { setShowLinkage(!showLinkage); if (showLinkage) setActiveTab('home') }}
-            title="계정 공유"
-            style={{ position: 'relative' }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
-          </button>
-          <button className="notification-btn" onClick={() => { setShowLinkage(false); setActiveTab('notifications') }}>
-            🔔
-            {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
-          </button>
           {loggedIn ? (
-            <button
-              className="notification-btn"
-              onClick={() => { if (confirm('로그아웃 하시겠습니까?')) { logout(); setLoggedIn(false) } }}
-              title="로그아웃"
-            >
-              🔓
-            </button>
+            <>
+              <button
+                className="notification-btn"
+                onClick={() => { setShowLinkage(!showLinkage); if (showLinkage) setActiveTab('home') }}
+                title="계정 공유"
+                style={{ position: 'relative' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
+              </button>
+              <button className="notification-btn" onClick={() => { setShowLinkage(false); setActiveTab('notifications') }}>
+                🔔
+                {unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
+              </button>
+              <button
+                className="notification-btn"
+                onClick={() => { if (confirm('로그아웃 하시겠습니까?')) { logout(); setLoggedIn(false) } }}
+                title="로그아웃"
+              >
+                🔓
+              </button>
+            </>
           ) : (
             <button
-              className="notification-btn"
+              className="btn btn-outline"
               onClick={() => redirectToLogin()}
-              title="로그인"
+              style={{ fontSize: '0.8rem', padding: '8px 16px' }}
             >
-              🔒
+              로그인
             </button>
           )}
         </div>
@@ -1313,11 +1424,11 @@ function App() {
 
       {/* Content */}
       <main className="main-content">
-        {showLinkage ? (
+        {showLinkage && loggedIn ? (
           <AccountLinkagePage />
         ) : (
           <>
-            {activeTab === 'home' && <DashboardPage />}
+            {activeTab === 'home' && (loggedIn ? <DashboardPage /> : <PromoPage />)}
             {activeTab === 'classes' && <ClassesPage />}
             {activeTab === 'assignments' && <AssignmentsPage />}
             {activeTab === 'notifications' && <NotificationsPage />}
