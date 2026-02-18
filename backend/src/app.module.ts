@@ -11,6 +11,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { ParentModule } from './parent/parent.module';
+import { IntegrationModule } from './integration/integration.module';
+import { SharedScheduleModule } from './shared-schedule/shared-schedule.module';
 
 @Module({
   imports: [
@@ -24,9 +26,12 @@ import { ParentModule } from './parent/parent.module';
     NotificationsModule,
     TeacherModule,
     ParentModule,
+    IntegrationModule,
+    SharedScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule { }
+
 

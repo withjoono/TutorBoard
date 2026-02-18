@@ -46,14 +46,31 @@ export class DashboardService {
             ? Math.round(recentTests.reduce((s, r) => s + (r.score / r.test.maxScore) * 100, 0) / recentTests.length)
             : 0;
 
-        // 다가오는 마감
+
+        // 다가오는 수업 (14일 이내)
+        const upcomingLessons = await this.prisma.tbLessonPlan.findMany({
+            where: {
+                classId: { in: classIds },
+                scheduledDate: {
+                    gte: new Date(),
+                    lte: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 2 weeks
+                },
+            },
+            include: {
+                class: { select: { name: true, subject: true, teacher: { select: { username: true } } } },
+            },
+            orderBy: { scheduledDate: 'asc' },
+        });
+
+        // 다가오는 마감 (과제)
         const upcomingDeadlines = await this.prisma.tbAssignment.findMany({
             where: {
                 lesson: { classId: { in: classIds } },
                 dueDate: { gte: new Date() },
             },
             include: {
-                lesson: { select: { class: { select: { name: true } } } },
+                lesson: { select: { title: true, class: { select: { name: true, subject: true } } } },
+                submissions: { where: { studentId }, select: { status: true } },
             },
             orderBy: { dueDate: 'asc' },
             take: 5,
@@ -86,11 +103,25 @@ export class DashboardService {
                 percentage: Math.round((r.score / r.test.maxScore) * 100),
                 takenAt: r.takenAt,
             })),
+            upcomingLessons: upcomingLessons.map((l) => ({
+                id: l.id,
+                title: l.title,
+                subject: l.class.subject,
+                date: l.scheduledDate,
+                startTime: '14:00', // TODO: Add time field to LessonPlan or Schedule
+                endTime: '15:30',
+                color: '#6366f1', // TODO: Map subject to color in frontend or backend
+                teacher: l.class.teacher.username,
+                classId: l.classId,
+            })),
             upcomingDeadlines: upcomingDeadlines.map((a) => ({
                 id: a.id,
                 title: a.title,
                 dueDate: a.dueDate,
                 className: a.lesson.class.name,
+                lessonTitle: a.lesson.title,
+                subject: a.lesson.class.subject,
+                submissionStatus: a.submissions[0]?.status || 'pending',
                 daysLeft: a.dueDate ? Math.ceil((new Date(a.dueDate).getTime() - Date.now()) / 86400000) : null,
             })),
             recentBadges: badges,

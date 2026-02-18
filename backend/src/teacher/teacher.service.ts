@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { SharedScheduleService } from '../shared-schedule/shared-schedule.service';
 
 @Injectable()
 export class TeacherService {
-    constructor(private prisma: PrismaService) { }
+    private readonly logger = new Logger(TeacherService.name);
+
+    constructor(
+        private prisma: PrismaService,
+        private sharedSchedule: SharedScheduleService,
+    ) { }
 
     // ===== CLASS MANAGEMENT =====
 
@@ -182,7 +188,7 @@ export class TeacherService {
         lessonId: string; title: string; description?: string; testDate?: string; maxScore: number;
     }) {
         await this.ensureTeacherOwnsClass(teacherId, classId);
-        return this.prisma.tbTest.create({
+        const test = await this.prisma.tbTest.create({
             data: {
                 lessonId: data.lessonId,
                 title: data.title,
@@ -190,7 +196,13 @@ export class TeacherService {
                 testDate: data.testDate ? new Date(data.testDate) : null,
                 maxScore: data.maxScore,
             },
+            include: { lesson: { include: { class: { select: { name: true, subject: true } } } } },
         });
+
+        // 공유 스케줄에 동기화 (수강생별)
+        this.syncEventForClassStudents(classId, test.id, 'test', test, test.lesson);
+
+        return test;
     }
 
     async bulkInputTestResults(teacherId: string, testId: string, results: Array<{
@@ -319,6 +331,15 @@ export class TeacherService {
                 }),
             );
             await this.prisma.$transaction(notifs);
+        }
+
+        // 공유 스케줄에 동기화 (수강생별)
+        const lesson = await this.prisma.tbLessonPlan.findUnique({
+            where: { id: data.lessonId },
+            include: { class: { select: { name: true, subject: true } } },
+        });
+        if (lesson) {
+            this.syncEventForClassStudents(classId, assignment.id, 'assignment', assignment, lesson);
         }
 
         return assignment;
@@ -478,5 +499,44 @@ export class TeacherService {
         });
         if (!cls) throw new ForbiddenException('Access denied: not your class');
         return cls;
+    }
+
+    /**
+     * 클래스 수강생별로 공유 스케줄에 이벤트 동기화 (비동기, fire-and-forget)
+     */
+    private async syncEventForClassStudents(
+        classId: string,
+        sourceId: string,
+        eventType: 'assignment' | 'test',
+        event: { title: string; dueDate?: Date | null; testDate?: Date | null },
+        lesson: { title: string; class: { name: string; subject?: string | null } },
+    ) {
+        try {
+            const enrollments = await this.prisma.tbClassEnrollment.findMany({
+                where: { classId },
+                include: { student: { select: { hubUserId: true } } },
+            });
+
+            for (const enrollment of enrollments) {
+                const hubUserId = enrollment.student.hubUserId;
+                if (!hubUserId) continue;
+
+                if (eventType === 'assignment') {
+                    await this.sharedSchedule.syncAssignment(
+                        String(hubUserId),
+                        { id: sourceId, title: event.title, dueDate: event.dueDate },
+                        { title: lesson.title, class: { name: lesson.class.name, subject: lesson.class.subject || undefined } },
+                    );
+                } else {
+                    await this.sharedSchedule.syncTest(
+                        String(hubUserId),
+                        { id: sourceId, title: event.title, testDate: event.testDate },
+                        { title: lesson.title, class: { name: lesson.class.name, subject: lesson.class.subject || undefined } },
+                    );
+                }
+            }
+        } catch (error) {
+            this.logger.error(`Failed to sync ${eventType} ${sourceId} for class ${classId}`, error);
+        }
     }
 }

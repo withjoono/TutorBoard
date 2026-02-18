@@ -80,6 +80,7 @@ model TbClass {
   id          String   @id @default(uuid())
   teacherId   String   @map("teacher_id")
   name        String
+  subject     String   @default("기타") // 국어, 수학, 영어, 과학, 사회, 기타
   description String?
   inviteCode  String   @unique @map("invite_code")
   startDate   DateTime? @map("start_date")
@@ -345,4 +346,28 @@ model TbStudentBadge {
   student TbUser @relation(fields: [studentId], references: [id])
 
   @@map("tb_student_badges")
+}
+
+// ===== SHARED SCHEDULE (Hub Schema — StudyPlanner ↔ TutorBoard) =====
+
+model HubSharedSchedule {
+  id          BigInt    @id @default(autoincrement())
+  hubUserId   String    @map("hub_user_id") @db.VarChar(100)
+  sourceApp   String    @map("source_app") @db.VarChar(20)
+  eventType   String    @map("event_type") @db.VarChar(30)
+  sourceId    String    @map("source_id") @db.VarChar(50)
+  title       String    @db.VarChar(200)
+  description String?   @db.Text
+  eventDate   DateTime  @map("event_date") @db.Date
+  startTime   DateTime? @map("start_time") @db.Time(0)
+  endTime     DateTime? @map("end_time") @db.Time(0)
+  subject     String?   @db.VarChar(50)
+  metadata    Json?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@unique([sourceApp, eventType, sourceId], name: "uk_hub_schedule_source")
+  @@index([hubUserId], name: "idx_hub_schedule_user")
+  @@index([hubUserId, eventDate], name: "idx_hub_schedule_date")
+  @@map("hub_shared_schedule")
 }
