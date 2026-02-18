@@ -461,7 +461,7 @@ function DashboardPage() {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const studentId = user.id || 'student-uuid-1';
 
-        const data = await api.get(\`/dashboard/student/\${studentId}\`);
+        const data = await api.get(`/dashboard/student/${studentId}`);
         setDashboardData(data);
       } catch (e) {
         console.error(e);
@@ -471,20 +471,20 @@ function DashboardPage() {
     }
     load();
   }, []);
-  
+
   if (loading) return <div className="p-8 text-center">Loading...</div>;
   if (!dashboardData) return <div className="p-8 text-center text-red-500">Failed to load data</div>;
 
   const lessons = dashboardData.upcomingLessons?.map((l: any) => ({
-      id: l.id,
-      title: l.title,
-      subject: l.subject || '기타',
-      date: l.date.split('T')[0],
-      startTime: l.startTime,
-      endTime: l.endTime,
-      color: l.color || SUBJECT_COLORS[l.subject] || '#888',
-      teacher: l.teacher,
-      classId: l.classId
+    id: l.id,
+    title: l.title,
+    subject: l.subject || '기타',
+    date: l.date.split('T')[0],
+    startTime: l.startTime,
+    endTime: l.endTime,
+    color: l.color || SUBJECT_COLORS[l.subject] || '#888',
+    teacher: l.teacher,
+    classId: l.classId
   })) || [];
 
   // Subject distribution
@@ -551,7 +551,7 @@ function AssignmentsPage() {
   const getStatusLabel = (a: Assignment) => {
     if (a.isOverdue) return '기한 초과'
     if (!a.submission) return '미제출'
-    if (a.submission.status === 'graded') return `${ a.submission.grade }점`
+    if (a.submission.status === 'graded') return `${a.submission.grade}점`
     return '제출 완료'
   }
 
@@ -565,7 +565,7 @@ function AssignmentsPage() {
       <div className="assignment-list">
         {assignments.map((a) => (
           <div className="assignment-item" key={a.id}>
-            <div className={`assignment - status ${ getStatusClass(a) }`} />
+            <div className={`assignment - status ${getStatusClass(a)}`} />
             <div className="assignment-info">
               <div className="assignment-title">{a.title}</div>
               <div className="assignment-meta">
@@ -624,9 +624,9 @@ function NotificationsPage() {
     const diff = now.getTime() - date.getTime()
     const hours = Math.floor(diff / 3600000)
     if (hours < 1) return '방금 전'
-    if (hours < 24) return `${ hours }시간 전`
+    if (hours < 24) return `${hours}시간 전`
     const days = Math.floor(hours / 24)
-    if (days < 7) return `${ days }일 전`
+    if (days < 7) return `${days}일 전`
     return date.toLocaleDateString('ko-KR')
   }
 
@@ -786,7 +786,7 @@ function ClassDetailView({ cls, onBack }: { cls: ClassInfo; onBack: () => void }
           <span className="plan-label">📋 수업 계획</span>
           <p>{cls.plan}</p>
         </div>
-        <ProgressBar value={cls.progress} label={`전체 진도 · 수업 ${ cls.lessonsCount } 개`} />
+        <ProgressBar value={cls.progress} label={`전체 진도 · 수업 ${cls.lessonsCount} 개`} />
       </div>
 
       {/* Lesson Records Table */}
@@ -812,7 +812,7 @@ function ClassDetailView({ cls, onBack }: { cls: ClassInfo; onBack: () => void }
                     <span className="date-sub">({r.dayOfWeek}) {r.time}</span>
                   </td>
                   <td className="cell-attendance">
-                    <span className={`att - badge att - ${ r.attendance } `}>
+                    <span className={`att - badge att - ${r.attendance} `}>
                       {attendanceIcon(r.attendance)} {attendanceLabel(r.attendance)}
                     </span>
                   </td>
@@ -833,8 +833,8 @@ function ClassDetailView({ cls, onBack }: { cls: ClassInfo; onBack: () => void }
         <div className="comment-section">
           <div className="comment-list">
             {comments.map((c) => (
-              <div key={c.id} className={`comment - bubble ${ c.role === 'student' ? 'mine' : '' } `}>
-                <div className={`bubble - content bubble - ${ c.role } `}>
+              <div key={c.id} className={`comment - bubble ${c.role === 'student' ? 'mine' : ''} `}>
+                <div className={`bubble - content bubble - ${c.role} `}>
                   <div className="bubble-header">
                     <span className="bubble-role-icon">
                       {c.role === 'teacher' ? '👨‍🏫' : c.role === 'parent' ? '👩' : '🧑'}
@@ -930,13 +930,13 @@ function ClassesPage() {
       {/* Navigation Mode Toggle */}
       <div className="classes-nav-toggle">
         <button
-          className={`nav - toggle - btn ${ navMode === 'calendar' ? 'active' : '' } `}
+          className={`nav - toggle - btn ${navMode === 'calendar' ? 'active' : ''} `}
           onClick={() => setNavMode('calendar')}
         >
           📅 일정으로 찾기
         </button>
         <button
-          className={`nav - toggle - btn ${ navMode === 'dropdown' ? 'active' : '' } `}
+          className={`nav - toggle - btn ${navMode === 'dropdown' ? 'active' : ''} `}
           onClick={() => setNavMode('dropdown')}
         >
           📂 과목으로 찾기
@@ -966,7 +966,7 @@ function ClassesPage() {
                 {Object.keys(SUBJECT_CATEGORIES).map(cat => (
                   <button
                     key={cat}
-                    className={`dropdown - chip ${ selCategory === cat ? 'active' : '' } `}
+                    className={`dropdown - chip ${selCategory === cat ? 'active' : ''} `}
                     onClick={() => {
                       setSelCategory(cat)
                       setSelSubject('')
@@ -987,7 +987,7 @@ function ClassesPage() {
                   {availableSubjects.map(sub => (
                     <button
                       key={sub}
-                      className={`dropdown - chip ${ selSubject === sub ? 'active' : '' } `}
+                      className={`dropdown - chip ${selSubject === sub ? 'active' : ''} `}
                       onClick={() => {
                         setSelSubject(sub)
                         setSelClassId('')
@@ -1008,14 +1008,14 @@ function ClassesPage() {
                   {availableClasses.map(cls => (
                     <div
                       key={cls.id}
-                      className={`dropdown - class- item ${ selClassId === cls.id ? 'active' : '' } `}
+                      className={`dropdown - class- item ${selClassId === cls.id ? 'active' : ''} `}
                       onClick={() => handleDropdownSelect(cls.id)}
                     >
                       <div className="dropdown-class-info">
                         <div className="dropdown-class-name">📖 {cls.name}</div>
                         <div className="dropdown-class-meta">{cls.teacher} · {cls.academy}</div>
                       </div>
-                      <ProgressBar value={cls.progress} label={`${ cls.lessonsCount } 개`} />
+                      <ProgressBar value={cls.progress} label={`${cls.lessonsCount} 개`} />
                     </div>
                   ))}
                 </div>
@@ -1114,7 +1114,7 @@ function AccountLinkagePage() {
   }
 
   const inviteLink = inviteCode
-    ? `${ hubUrl } /account-linkage/accept ? code = ${ inviteCode } `
+    ? `${hubUrl} /account-linkage/accept ? code = ${inviteCode} `
     : ''
 
   const handleCopy = () => {
@@ -1127,7 +1127,7 @@ function AccountLinkagePage() {
     if (!confirm('정말 연동을 해제하시겠습니까?')) return
     setUnlinkingId(linkId)
     try {
-      await hubApi.delete(`/ mentoring / links / ${ linkId } `)
+      await hubApi.delete(`/ mentoring / links / ${linkId} `)
       fetchLinkedAccounts()
     } catch {
       console.error('[계정연동] 연동 해제 실패')
@@ -1506,7 +1506,7 @@ function App() {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`nav - link ${ activeTab === tab.id && !showLinkage ? 'active' : '' } `}
+              className={`nav - link ${activeTab === tab.id && !showLinkage ? 'active' : ''} `}
               onClick={() => { setActiveTab(tab.id); setShowLinkage(false) }}
             >
               {tab.label}
@@ -1525,7 +1525,7 @@ function App() {
             title="결제"
             style={{ color: '#2563eb' }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
           </button>
           {/* 알림 */}
           <button
@@ -1548,7 +1548,7 @@ function App() {
             }}
             title="계정연동"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
           </button>
           {loggedIn ? (
             <button
