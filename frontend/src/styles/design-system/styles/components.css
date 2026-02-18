@@ -1,0 +1,593 @@
+/* ============================================================
+ * 거북스쿨 디자인 시스템 — 토스 스타일 공통 컴포넌트
+ * ============================================================ */
+
+/* ═══════════════════════════════════════════
+ * RESET & BASE
+ * ═══════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    letter-spacing: var(--tracking-tight);
+}
+
+/* ═══════════════════════════════════════════
+ * HEADER — 토스 스타일 상단바
+ * ═══════════════════════════════════════════ */
+.gb-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+    padding: 0 var(--space-6);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.gb-header-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    color: var(--color-primary);
+    text-decoration: none;
+    letter-spacing: var(--tracking-tight);
+}
+
+.gb-header-brand-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+}
+
+.gb-header-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.gb-header-nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.gb-header-nav-link:hover {
+    color: var(--color-text);
+    background: var(--color-bg-secondary);
+}
+
+.gb-header-nav-link.active,
+.gb-header-nav-link[data-active="true"] {
+    color: var(--color-primary);
+    font-weight: var(--weight-semibold);
+}
+
+.gb-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.gb-header-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: var(--color-text-tertiary);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.gb-header-icon-btn:hover {
+    color: var(--color-text);
+    background: var(--color-bg-secondary);
+}
+
+/* ═══════════════════════════════════════════
+ * CARD — 토스 스타일 카드
+ * ═══════════════════════════════════════════ */
+.gb-card {
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+    transition: box-shadow var(--transition-normal);
+}
+
+.gb-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.gb-card-flat {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    border: none;
+    box-shadow: none;
+}
+
+.gb-card-primary {
+    background: var(--color-primary-bg, var(--color-bg-secondary));
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    border: none;
+}
+
+.gb-card-title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+}
+
+.gb-card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    line-height: var(--leading-relaxed);
+}
+
+/* ═══════════════════════════════════════════
+ * BUTTON — 토스 스타일 버튼
+ * ═══════════════════════════════════════════ */
+.gb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 48px;
+    padding: 0 var(--space-6);
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.gb-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.gb-btn-primary {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+.gb-btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+}
+
+.gb-btn-secondary {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+}
+
+.gb-btn-secondary:hover:not(:disabled) {
+    background: var(--color-border);
+}
+
+.gb-btn-outline {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.gb-btn-outline:hover:not(:disabled) {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-text-disabled);
+}
+
+.gb-btn-ghost {
+    background: transparent;
+    color: var(--color-text-tertiary);
+}
+
+.gb-btn-ghost:hover:not(:disabled) {
+    color: var(--color-text);
+    background: var(--color-bg-secondary);
+}
+
+.gb-btn-sm {
+    height: 36px;
+    padding: 0 var(--space-4);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-sm);
+}
+
+.gb-btn-lg {
+    height: 56px;
+    padding: 0 var(--space-8);
+    font-size: var(--text-lg);
+    border-radius: var(--radius-lg);
+}
+
+.gb-btn-full {
+    width: 100%;
+}
+
+/* ═══════════════════════════════════════════
+ * INPUT — 토스 스타일 입력 필드
+ * ═══════════════════════════════════════════ */
+.gb-input {
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--space-4);
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    color: var(--color-text);
+    background: var(--color-bg-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.gb-input::placeholder {
+    color: var(--color-text-disabled);
+}
+
+.gb-input:focus {
+    background: var(--color-bg);
+    border-color: var(--color-primary, var(--color-border-focus));
+    box-shadow: 0 0 0 3px var(--color-primary-50, rgba(49, 130, 246, 0.1));
+}
+
+.gb-input-error {
+    border-color: var(--color-error);
+}
+
+.gb-input-label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+}
+
+.gb-input-helper {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: var(--space-1);
+}
+
+.gb-input-error-msg {
+    font-size: var(--text-xs);
+    color: var(--color-error);
+    margin-top: var(--space-1);
+}
+
+/* ═══════════════════════════════════════════
+ * LIST — 토스 공지사항 스타일 리스트
+ * ═══════════════════════════════════════════ */
+.gb-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gb-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border-light);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    text-decoration: none;
+    color: inherit;
+}
+
+.gb-list-item:first-child {
+    border-top: 1px solid var(--color-border-light);
+}
+
+.gb-list-item:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.gb-list-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.gb-list-item-title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gb-list-item-meta {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+}
+
+.gb-list-item-arrow {
+    color: var(--color-text-disabled);
+    margin-left: var(--space-3);
+    flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+ * BADGE — 뱃지 / 태그
+ * ═══════════════════════════════════════════ */
+.gb-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    border-radius: var(--radius-xs);
+    line-height: 1;
+}
+
+.gb-badge-primary {
+    background: var(--color-primary-50);
+    color: var(--color-primary);
+}
+
+.gb-badge-success {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.gb-badge-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.gb-badge-error {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.gb-badge-info {
+    background: var(--color-info-bg);
+    color: var(--color-info);
+}
+
+.gb-badge-neutral {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-tertiary);
+}
+
+/* ═══════════════════════════════════════════
+ * SECTION TITLE — 섹션 제목
+ * ═══════════════════════════════════════════ */
+.gb-section-title {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+}
+
+.gb-section-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    margin-top: calc(var(--space-1) * -1);
+    margin-bottom: var(--space-4);
+}
+
+/* ═══════════════════════════════════════════
+ * DIVIDER — 구분선
+ * ═══════════════════════════════════════════ */
+.gb-divider {
+    border: none;
+    border-top: 1px solid var(--color-border-light);
+    margin: var(--space-6) 0;
+}
+
+.gb-divider-thick {
+    border: none;
+    height: 8px;
+    background: var(--color-bg-secondary);
+    margin: var(--space-6) 0;
+}
+
+/* ═══════════════════════════════════════════
+ * EMPTY STATE — 빈 상태
+ * ═══════════════════════════════════════════ */
+.gb-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) var(--space-6);
+    text-align: center;
+}
+
+.gb-empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-4);
+}
+
+.gb-empty-title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+}
+
+.gb-empty-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    max-width: 320px;
+}
+
+/* ═══════════════════════════════════════════
+ * STAT CARD — 통계 카드 (토스 인포그래픽 스타일)
+ * ═══════════════════════════════════════════ */
+.gb-stat-card {
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+}
+
+.gb-stat-label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-2);
+}
+
+.gb-stat-value {
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-extrabold);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+}
+
+.gb-stat-unit {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    margin-left: var(--space-1);
+}
+
+.gb-stat-change {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+}
+
+.gb-stat-change-up {
+    color: var(--color-success);
+}
+
+.gb-stat-change-down {
+    color: var(--color-error);
+}
+
+/* ═══════════════════════════════════════════
+ * MODAL / DIALOG
+ * ═══════════════════════════════════════════ */
+.gb-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-overlay);
+    animation: gb-fade-in var(--transition-fast);
+}
+
+.gb-modal {
+    background: var(--color-bg);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    max-width: 420px;
+    width: calc(100% - var(--space-8));
+    box-shadow: var(--shadow-xl);
+    animation: gb-slide-up var(--transition-normal);
+}
+
+.gb-modal-title {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+    margin-bottom: var(--space-3);
+}
+
+.gb-modal-body {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-6);
+}
+
+.gb-modal-actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* ═══════════════════════════════════════════
+ * ANIMATIONS
+ * ═══════════════════════════════════════════ */
+@keyframes gb-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gb-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gb-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

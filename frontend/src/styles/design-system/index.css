@@ -1,0 +1,27 @@
+/* ============================================================
+ * 거북스쿨 통합 디자인 시스템
+ * 토스(toss.im) 스타일 기반
+ * ============================================================
+ * 
+ * 사용법 (각 앱의 글로벌 CSS에서):
+ *   @import '@shared/design-system/index.css';
+ * 
+ * HTML에 앱 식별자 추가:
+ *   <html data-app="hub">
+ * 
+ * 가능한 data-app 값:
+ *   hub, jungsi, susi, studyplanner, studyarena,
+ *   mysanggibu, examhub, tutorboard, teacher-admin, parent-admin
+ * ============================================================ */
+
+/* 1. 디자인 토큰 (변수 정의) */
+@import './tokens/design-tokens.css';
+
+/* 2. 앱별 테마 색상 */
+@import './tokens/app-themes.css';
+
+/* 3. 공통 컴포넌트 스타일 */
+@import './styles/components.css';
+
+/* 4. 레이아웃 유틸리티 */
+@import './styles/layout.css';

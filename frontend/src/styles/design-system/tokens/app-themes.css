@@ -1,0 +1,105 @@
+/* ============================================================
+ * 거북스쿨 디자인 시스템 — 앱별 테마 색상
+ * ============================================================
+ * 사용법: <html data-app="hub"> 속성으로 앱별 Primary Color 활성화
+ * ============================================================ */
+
+/* ─── Hub (회색) ─── */
+[data-app="hub"] {
+    --color-primary: #514F59;
+    --color-primary-hover: #3D3B44;
+    --color-primary-light: #7A7882;
+    --color-primary-50: #F5F4F6;
+    --color-primary-100: #E8E7EA;
+    --color-primary-bg: #F5F4F6;
+}
+
+/* ─── 정시 (Orange 유자) ─── */
+[data-app="jungsi"] {
+    --color-primary: #f97316;
+    --color-primary-hover: #ea580c;
+    --color-primary-light: #fb923c;
+    --color-primary-50: #FFF7ED;
+    --color-primary-100: #FFEDD5;
+    --color-primary-bg: #FFF7ED;
+}
+
+/* ─── 수시 (Olive 유지) ─── */
+[data-app="susi"] {
+    --color-primary: #3e5622;
+    --color-primary-hover: #2F4119;
+    --color-primary-light: #5A7A35;
+    --color-primary-50: #F5F8F0;
+    --color-primary-100: #E8EFDD;
+    --color-primary-bg: #F5F8F0;
+}
+
+/* ─── StudyPlanner (Ultrasonic Blue) ─── */
+[data-app="studyplanner"] {
+    --color-primary: #3b28cc;
+    --color-primary-hover: #2E1FA3;
+    --color-primary-light: #5B4BD6;
+    --color-primary-50: #F0EDFB;
+    --color-primary-100: #DDD8F5;
+    --color-primary-bg: #F0EDFB;
+}
+
+/* ─── StudyArena (Inferno) ─── */
+[data-app="studyarena"] {
+    --color-primary: #a40606;
+    --color-primary-hover: #7D0505;
+    --color-primary-light: #C52020;
+    --color-primary-50: #FDF2F2;
+    --color-primary-100: #FAE0E0;
+    --color-primary-bg: #FDF2F2;
+}
+
+/* ─── MySanggibu (Deep Ocean) ─── */
+[data-app="mysanggibu"] {
+    --color-primary: #007c77;
+    --color-primary-hover: #005E5A;
+    --color-primary-light: #009E98;
+    --color-primary-50: #F0FAFA;
+    --color-primary-100: #D5F0EF;
+    --color-primary-bg: #F0FAFA;
+}
+
+/* ─── ExamHub (Purple Grape) ─── */
+[data-app="examhub"] {
+    --color-primary: #4c1a57;
+    --color-primary-hover: #381342;
+    --color-primary-light: #6E2E7A;
+    --color-primary-50: #F8F2F9;
+    --color-primary-100: #EDE1F0;
+    --color-primary-bg: #F8F2F9;
+}
+
+/* ─── TutorBoard (Deep Wine) ─── */
+[data-app="tutorboard"] {
+    --color-primary: #230007;
+    --color-primary-hover: #170005;
+    --color-primary-light: #4A0F1A;
+    --color-primary-50: #FBF2F3;
+    --color-primary-100: #F3DFE1;
+    --color-primary-bg: #FBF2F3;
+}
+
+/* ─── teacher_Admin (Blue Energy) ─── */
+[data-app="teacher-admin"] {
+    --color-primary: #3f8efc;
+    --color-primary-hover: #2176E8;
+    --color-primary-light: #6AABFD;
+    --color-primary-50: #EFF6FF;
+    --color-primary-100: #DBEAFE;
+    --color-primary-bg: #EFF6FF;
+}
+
+/* ─── ParentAdmin (Fuchsia Pop) ─── */
+[data-app="parent-admin"] {
+    --color-primary: #d946ef;
+    --color-primary-hover: #C026D3;
+    --color-primary-light: #E879F9;
+    --color-primary-50: #FDF4FF;
+    --color-primary-100: #FAE8FF;
+    --color-primary-bg: #FDF4FF;
+}

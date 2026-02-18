@@ -1,0 +1,343 @@
+/* ============================================================
+ * 거북스쿨 디자인 시스템 — 레이아웃 유틸리티
+ * ============================================================ */
+
+/* ═══════════════════════════════════════════
+ * PAGE WRAPPER
+ * ═══════════════════════════════════════════ */
+.gb-page {
+    max-width: var(--max-w-content);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+}
+
+.gb-page-wide {
+    max-width: var(--max-w-wide);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+}
+
+.gb-page-dashboard {
+    max-width: var(--max-w-dashboard);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+}
+
+.gb-page-full {
+    max-width: var(--max-w-full);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+}
+
+.gb-page-narrow {
+    max-width: var(--max-w-narrow);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+}
+
+/* ═══════════════════════════════════════════
+ * PAGE HEADER (Title + Description)
+ * ═══════════════════════════════════════════ */
+.gb-page-header {
+    margin-bottom: var(--space-8);
+}
+
+.gb-page-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-extrabold);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+}
+
+.gb-page-desc {
+    font-size: var(--text-base);
+    color: var(--color-text-tertiary);
+    margin-top: var(--space-2);
+    line-height: var(--leading-relaxed);
+}
+
+/* ═══════════════════════════════════════════
+ * STACK — 수직/수평 배열 유틸리티
+ * ═══════════════════════════════════════════ */
+.gb-stack {
+    display: flex;
+    flex-direction: column;
+}
+
+.gb-stack-1 {
+    gap: var(--space-1);
+}
+
+.gb-stack-2 {
+    gap: var(--space-2);
+}
+
+.gb-stack-3 {
+    gap: var(--space-3);
+}
+
+.gb-stack-4 {
+    gap: var(--space-4);
+}
+
+.gb-stack-5 {
+    gap: var(--space-5);
+}
+
+.gb-stack-6 {
+    gap: var(--space-6);
+}
+
+.gb-stack-8 {
+    gap: var(--space-8);
+}
+
+.gb-stack-10 {
+    gap: var(--space-10);
+}
+
+.gb-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.gb-row-1 {
+    gap: var(--space-1);
+}
+
+.gb-row-2 {
+    gap: var(--space-2);
+}
+
+.gb-row-3 {
+    gap: var(--space-3);
+}
+
+.gb-row-4 {
+    gap: var(--space-4);
+}
+
+.gb-row-6 {
+    gap: var(--space-6);
+}
+
+/* ═══════════════════════════════════════════
+ * GRID — 반응형 카드 그리드
+ * ═══════════════════════════════════════════ */
+.gb-grid {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.gb-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.gb-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.gb-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.gb-grid-auto {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+
+    .gb-grid-2,
+    .gb-grid-3,
+    .gb-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .gb-page,
+    .gb-page-wide,
+    .gb-page-dashboard,
+    .gb-page-full,
+    .gb-page-narrow {
+        padding: var(--space-5) var(--space-4);
+    }
+
+    .gb-page-title {
+        font-size: var(--text-xl);
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .gb-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gb-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ═══════════════════════════════════════════
+ * SECTION — 콘텐츠 섹션 구분
+ * ═══════════════════════════════════════════ */
+.gb-section {
+    padding: var(--space-10) 0;
+}
+
+.gb-section-bg {
+    padding: var(--space-10) var(--space-6);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-2xl);
+    margin: var(--space-4) 0;
+}
+
+/* ═══════════════════════════════════════════
+ * FOOTER — 하단 푸터
+ * ═══════════════════════════════════════════ */
+.gb-footer {
+    border-top: 1px solid var(--color-border-light);
+    padding: var(--space-10) var(--space-6);
+    margin-top: var(--space-16);
+}
+
+.gb-footer-inner {
+    max-width: var(--max-w-dashboard);
+    margin: 0 auto;
+}
+
+.gb-footer-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    line-height: var(--leading-relaxed);
+}
+
+.gb-footer-links {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.gb-footer-link {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.gb-footer-link:hover {
+    color: var(--color-text);
+}
+
+/* ═══════════════════════════════════════════
+ * UTILITY — 자주 쓰는 유틸리티
+ * ═══════════════════════════════════════════ */
+.gb-text-center {
+    text-align: center;
+}
+
+.gb-text-right {
+    text-align: right;
+}
+
+.gb-text-primary {
+    color: var(--color-primary);
+}
+
+.gb-text-muted {
+    color: var(--color-text-tertiary);
+}
+
+.gb-text-sm {
+    font-size: var(--text-sm);
+}
+
+.gb-text-xs {
+    font-size: var(--text-xs);
+}
+
+.gb-text-lg {
+    font-size: var(--text-lg);
+}
+
+.gb-text-xl {
+    font-size: var(--text-xl);
+}
+
+.gb-text-bold {
+    font-weight: var(--weight-bold);
+}
+
+.gb-text-semibold {
+    font-weight: var(--weight-semibold);
+}
+
+.gb-mt-0 {
+    margin-top: 0;
+}
+
+.gb-mt-2 {
+    margin-top: var(--space-2);
+}
+
+.gb-mt-4 {
+    margin-top: var(--space-4);
+}
+
+.gb-mt-6 {
+    margin-top: var(--space-6);
+}
+
+.gb-mt-8 {
+    margin-top: var(--space-8);
+}
+
+.gb-mb-0 {
+    margin-bottom: 0;
+}
+
+.gb-mb-2 {
+    margin-bottom: var(--space-2);
+}
+
+.gb-mb-4 {
+    margin-bottom: var(--space-4);
+}
+
+.gb-mb-6 {
+    margin-bottom: var(--space-6);
+}
+
+.gb-mb-8 {
+    margin-bottom: var(--space-8);
+}
+
+.gb-hidden {
+    display: none !important;
+}
+
+.gb-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Mobile visibility */
+@media (max-width: 768px) {
+    .gb-hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .gb-hide-desktop {
+        display: none !important;
+    }
+}
