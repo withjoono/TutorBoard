@@ -423,7 +423,7 @@ function DashboardPage() {
         const studentId = userInfo?.id;
 
         if (studentId) {
-          const data = await api.get<any>(`/dashboard/student/${studentId}`);
+          const data = await api.get<any>(`/dashboard/student`);
           if (data?.upcomingLessons?.length) {
             setLessons(data.upcomingLessons.map((l: any) => ({
               id: l.id,

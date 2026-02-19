@@ -9,10 +9,9 @@ import { AssignmentsModule } from './assignments/assignments.module';
 import { TestsModule } from './tests/tests.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { TeacherModule } from './teacher/teacher.module';
-import { ParentModule } from './parent/parent.module';
 import { IntegrationModule } from './integration/integration.module';
 import { SharedScheduleModule } from './shared-schedule/shared-schedule.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -24,10 +23,9 @@ import { SharedScheduleModule } from './shared-schedule/shared-schedule.module';
     TestsModule,
     DashboardModule,
     NotificationsModule,
-    TeacherModule,
-    ParentModule,
     IntegrationModule,
     SharedScheduleModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
