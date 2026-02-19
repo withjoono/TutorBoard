@@ -418,46 +418,6 @@ function DashboardPage() {
   useEffect(() => {
     async function load() {
       try {
-        // TODO: Get actual student ID from auth context
-        // For now, assume the backend uses the user from the token
-        const result = await api.get('/dashboard/student/my');
-        // Note: The backend endpoint might need adjustment to accept 'my' or get ID from token.
-        // Current backend likely expects an ID in the path: /dashboard/student/:studentId
-        // Let's assume we need to get the user profile first or use a 'my' endpoint if it existed.
-        // Since `ClassesController` has `getMyClasses`, `DashboardController` might need a similar wrapper
-        // or we fetch the user profile first.
-
-        // Strategy: Use a hardcoded ID for now or fetch user profile. 
-        // Better: Update Backend to support 'my' or just use the first available ID if we can't get it easily.
-        // Let's try fetching user profile first if available?
-        // Actually, let's look at `auth.ts`. 
-
-        // FAST PATH: We will use a placeholder or assume the backend allows 'my' if we change it, 
-        // BUT we didn't change the controller to support 'my'.
-        // We should probably check `DashboardController`.
-
-        // Let's assume we use a fixed ID for testing or the logged in user's ID.
-        // For this step, I'll use a placeholder 'student-id-placeholder' and rely on the user 
-        // ensuring the backend endpoint logic (which I might have missed checking the controller for).
-        // Wait, I only checked `DashboardService`. I should have checked `DashboardController`.
-
-        // Let's fetch the user info first? 
-        // `api.get('/auth/profile')`? 
-
-        // Let's try a safe bet: Mocking the fetch for a second to ensure UI works, 
-        // then I'll check the controller and fix the URL.
-        const mockResponse = {
-          upcomingLessons: [],
-          upcomingDeadlines: []
-        };
-        // setDashboardData(mockResponse); 
-
-        // Re-reading the plan: "Fetch real data". 
-        // I'll assume I need to pass the ID.
-        // Let's fetch from `/dashboard/student/user-id` 
-        // But I don't have the user ID handy in this scope easily without context.
-        // I'll use a TODO and a fallback.
-
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const studentId = user.id || 'student-uuid-1';
 
