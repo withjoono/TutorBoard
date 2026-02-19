@@ -1456,81 +1456,79 @@ function App() {
         />
       )}
 
-      {/* Top Navigation Bar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <a className="navbar-brand" href="/">
-            <span className="logo-icon">🎓</span>
-            TutorBoard
-          </a>
-        </div>
+      {/* Top Navigation Bar — 통합 디자인 시스템 */}
+      <header className="gb-header">
+        <a className="gb-header-brand" href="/">
+          <span className="gb-header-brand-dot" />
+          TutorBoard
+        </a>
 
-        <div className="navbar-center">
+        <nav className="gb-header-nav">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`nav - link ${activeTab === tab.id && !showLinkage ? 'active' : ''} `}
+              className={`gb-header-nav-link ${activeTab === tab.id && !showLinkage ? 'active' : ''}`}
               onClick={() => { setActiveTab(tab.id); setShowLinkage(false) }}
             >
               {tab.label}
             </button>
           ))}
-        </div>
+        </nav>
 
-        <div className="navbar-actions">
+        <div className="gb-header-actions">
           {/* 결제 */}
           <button
-            className="navbar-icon-btn"
+            className="gb-header-icon-btn"
             onClick={() => {
               if (!loggedIn) { redirectToLogin(); return }
               // TODO: navigate to payment
             }}
             title="결제"
-            style={{ color: '#2563eb' }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
           </button>
           {/* 알림 */}
           <button
-            className="navbar-icon-btn"
+            className="gb-header-icon-btn"
             onClick={() => {
               if (!loggedIn) { redirectToLogin(); return }
               setShowLinkage(false); setActiveTab('notifications')
             }}
             title="알림"
+            style={{ position: 'relative' }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
-            {loggedIn && unreadCount > 0 && <span className="notification-badge">{unreadCount}</span>}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
+            {loggedIn && unreadCount > 0 && <span className="tb-notif-badge">{unreadCount}</span>}
           </button>
           {/* 계정연동 */}
           <button
-            className="navbar-icon-btn"
+            className="gb-header-icon-btn"
             onClick={() => {
               if (!loggedIn) { redirectToLogin(); return }
               setShowLinkage(!showLinkage); if (showLinkage) setActiveTab('home')
             }}
             title="계정연동"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
           </button>
           {loggedIn ? (
             <button
-              className="navbar-icon-btn"
+              className="gb-header-icon-btn"
               onClick={() => { if (confirm('로그아웃 하시겠습니까?')) { logout(); setLoggedIn(false) } }}
               title="로그아웃"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
             </button>
           ) : (
             <button
-              className="btn-nav-login"
+              className="gb-btn gb-btn-primary gb-btn-sm"
               onClick={() => redirectToLogin()}
             >
               로그인
             </button>
           )}
         </div>
-      </nav>
+      </header>
 
       {/* Content */}
       <main className="main-content">

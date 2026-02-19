@@ -1,76 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* ============================================================
+ * TutorBoard — 앱 전용 스타일 (통합 디자인 시스템 위에 로드)
+ * 디자인 시스템은 main.tsx에서 design-system/index.css로 로드됨
+ * ============================================================ */
 
+/* ─── App-specific variable aliases (레거시 호환) ─── */
 :root {
-  /* Primary palette - 딕 와인/고동색 🍷 */
-  --color-primary: #3d0012;
-  --color-primary-light: #6b1a30;
-  --color-primary-dark: #30000e;
-  --color-primary-glow: rgba(61, 0, 18, 0.3);
-
-  /* Accent - warm amber */
+  --color-primary-light: #4A0F1A;
   --color-accent: #f59e0b;
   --color-accent-light: #fbbf24;
   --color-accent-dark: #d97706;
-
-  /* Warning - warm amber */
-  --color-warning: #f59e0b;
-  --color-warning-light: #fbbf24;
-
-  /* Danger - soft red */
   --color-danger: #ef4444;
   --color-danger-light: #f87171;
-
-  /* Success - fresh green */
   --color-success: #22c55e;
   --color-success-light: #4ade80;
-
-  /* Light mode default */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f8f8;
-  --bg-card: #ffffff;
-  --bg-card-hover: #fdf2f4;
-  --bg-input: #f9fafb;
-
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --text-bright: #111827;
-
-  --border-color: rgba(61, 0, 18, 0.12);
-  --border-active: rgba(61, 0, 18, 0.3);
-
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-  --shadow-glow: 0 0 20px var(--color-primary-glow);
-
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-
-  --transition: 0.2s ease;
-  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-family: var(--font-family);
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  -webkit-font-smoothing: antialiased;
-}
-
-body {
-  min-height: 100vh;
-  background: #ffffff;
+  --bg-card: var(--color-bg-elevated, #ffffff);
+  --bg-card-hover: var(--color-primary-50, #FBF2F3);
+  --bg-input: var(--color-bg-secondary, #f4f5f7);
+  --text-primary: var(--color-text, #191F28);
+  --text-secondary: var(--color-text-secondary, #333D4B);
+  --text-muted: var(--color-text-tertiary, #8B95A1);
+  --text-bright: var(--color-text, #191F28);
+  --border-color: var(--color-border-light, #F2F3F5);
+  --border-active: var(--color-border, #E5E8EB);
 }
 
 #root {
@@ -79,157 +30,26 @@ body {
   min-height: 100vh;
 }
 
-/* ===== TOP NAVBAR ===== */
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  height: 56px;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.94rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  text-decoration: none;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.navbar-brand .logo-icon {
-  font-size: 1.3rem;
-}
-
-/* Center navigation links */
-.navbar-center {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 0 24px;
-}
-
-.nav-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 16px;
-  height: 56px;
-  border: none;
-  background: none;
-  color: var(--text-secondary);
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.2s ease;
-  font-family: var(--font-family);
-  white-space: nowrap;
-}
-
-.nav-link:hover {
-  color: var(--text-bright);
-}
-
-.nav-link.active {
-  color: var(--text-bright);
-  font-weight: 700;
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 8px;
-  right: 8px;
-  height: 2.5px;
-  background: var(--color-primary);
-  border-radius: 2px 2px 0 0;
-}
-
-/* Right action icons */
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.navbar-icon-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: none;
-  color: var(--text-secondary);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.navbar-icon-btn:hover {
-  color: var(--text-bright);
-  background: var(--bg-card-hover);
-}
-
-.navbar-icon-btn .notification-badge {
+/* ===== NOTIFICATION BADGE (TutorBoard specific) ===== */
+.tb-notif-badge {
   position: absolute;
   top: 2px;
   right: 2px;
   min-width: 16px;
   height: 16px;
-  background: var(--color-danger);
+  background: var(--color-error, #ef4444);
   color: white;
   font-size: 0.6rem;
   font-weight: 700;
-  border-radius: 50%;
+  border-radius: var(--radius-full, 50%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 3px;
-  animation: pulse-badge 2s infinite;
+  animation: tb-pulse 2s infinite;
 }
 
-.btn-nav-login {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 20px;
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: 9999px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: var(--font-family);
-  white-space: nowrap;
-}
-
-.btn-nav-login:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-@keyframes pulse-badge {
+@keyframes tb-pulse {
 
   0%,
   100% {
@@ -244,11 +64,58 @@ body {
 /* ===== MAIN CONTENT ===== */
 .main-content {
   flex: 1;
-  padding: 20px;
-  padding-bottom: 24px;
-  max-width: 800px;
+  padding: var(--space-5, 20px) var(--space-6, 24px);
+  padding-bottom: var(--space-6, 24px);
+  max-width: var(--max-w-content, 800px);
   margin: 0 auto;
   width: 100%;
+}
+
+/* ===== MOBILE RESPONSIVE (TutorBoard specific) ===== */
+@media (max-width: 768px) {
+  .gb-header {
+    padding: 0 var(--space-3, 12px);
+  }
+
+  .gb-header-nav {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gb-header-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gb-header-nav-link {
+    font-size: var(--text-xs, 0.6875rem);
+    padding: var(--space-2, 8px) var(--space-2, 8px);
+    white-space: nowrap;
+  }
+
+  .gb-header-brand {
+    font-size: var(--text-sm, 0.8125rem);
+  }
+
+  .gb-header-actions {
+    gap: var(--space-1, 4px);
+  }
+
+  .gb-header-icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .gb-header-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .main-content {
+    padding: var(--space-4, 16px) var(--space-3, 12px);
+  }
 }
 
 
