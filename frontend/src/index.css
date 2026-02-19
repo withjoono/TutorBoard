@@ -2872,3 +2872,502 @@
   font-size: 0.92rem;
   line-height: 1.6;
 }
+
+/* ============================================================
+ * PROMO PAGE — TutorBoard 비로그인 랜딩 페이지
+ * ============================================================ */
+
+.tb-promo {
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+/* ─── Hero Section ─── */
+.tb-promo-hero {
+  background: linear-gradient(145deg, #230007 0%, #4A0F1A 40%, #1a0003 100%);
+  color: #fff;
+  text-align: center;
+  padding: 80px 24px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tb-promo-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(99, 102, 241, 0.06) 0%, transparent 40%);
+  animation: tb-promo-glow 8s ease-in-out infinite alternate;
+}
+
+@keyframes tb-promo-glow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(-3%, 2%) scale(1.05);
+  }
+}
+
+.tb-promo-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.tb-promo-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.tb-promo-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.tb-promo-hero h1 .accent {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tb-promo-hero-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.tb-promo-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+  font-family: var(--font-family);
+}
+
+.tb-promo-hero-cta:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(245, 158, 11, 0.45);
+}
+
+/* ─── Sections common ─── */
+.tb-promo-section {
+  padding: 60px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.tb-promo-section-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.tb-promo-section-sub {
+  font-size: 0.88rem;
+  text-align: center;
+  color: var(--color-text-tertiary);
+  margin-bottom: 32px;
+}
+
+/* ─── Comparison Table ─── */
+.tb-promo-compare {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+}
+
+.tb-promo-compare table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tb-promo-compare thead {
+  background: #230007;
+  color: #fff;
+}
+
+.tb-promo-compare th {
+  padding: 14px 16px;
+  font-weight: 700;
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.tb-promo-compare th:first-child {
+  width: 90px;
+  text-align: center;
+}
+
+.tb-promo-compare td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-light);
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.tb-promo-compare td:first-child {
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  background: var(--color-bg-tertiary);
+  white-space: nowrap;
+}
+
+.tb-promo-compare td:last-child {
+  color: #4A0F1A;
+  font-weight: 600;
+}
+
+.tb-promo-compare tr:last-child td {
+  border-bottom: none;
+}
+
+/* ─── 3-Party Flow Diagram ─── */
+.tb-promo-flow {
+  background: linear-gradient(145deg, #0f0f14 0%, #1a1a24 100%);
+  border-radius: var(--radius-xl);
+  padding: 40px 24px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tb-promo-flow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.tb-promo-flow-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Flow nodes */
+.tb-flow-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.tb-flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.tb-flow-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tb-flow-node:hover {
+  transform: scale(1.05);
+}
+
+.tb-flow-node.teacher {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.tb-flow-node.student {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.tb-flow-node.parent {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+}
+
+.tb-flow-node.table {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 14px 22px;
+  font-size: 0.9rem;
+}
+
+.tb-flow-node.link {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  font-size: 0.78rem;
+  padding: 8px 14px;
+}
+
+.tb-flow-arrow {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.tb-flow-arrow-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.tb-flow-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Flow description list */
+.tb-flow-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.tb-flow-desc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tb-flow-desc-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tb-flow-desc-text {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+.tb-flow-desc-text strong {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+}
+
+/* ─── Feature Cards ─── */
+.tb-promo-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.tb-promo-fcard {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.tb-promo-fcard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--fcard-color, #f59e0b), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tb-promo-fcard:hover {
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.tb-promo-fcard:hover::before {
+  opacity: 1;
+}
+
+.tb-promo-fcard-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  background: var(--fcard-bg, rgba(245, 158, 11, 0.1));
+}
+
+.tb-promo-fcard h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.tb-promo-fcard p {
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+  line-height: 1.7;
+}
+
+/* ─── Promo Footer ─── */
+.tb-promo-footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid var(--color-border-light);
+  color: var(--color-text-tertiary);
+  font-size: 0.78rem;
+}
+
+/* ─── Promo Animations ─── */
+@keyframes tb-promo-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tb-promo-hero-inner {
+  animation: tb-promo-fadeUp 0.8s ease-out;
+}
+
+.tb-promo-compare {
+  animation: tb-promo-fadeUp 0.8s ease-out 0.1s both;
+}
+
+.tb-promo-flow {
+  animation: tb-promo-fadeUp 0.8s ease-out 0.2s both;
+}
+
+.tb-promo-fcard:nth-child(1) {
+  animation: tb-promo-fadeUp 0.6s ease-out 0.3s both;
+}
+
+.tb-promo-fcard:nth-child(2) {
+  animation: tb-promo-fadeUp 0.6s ease-out 0.4s both;
+}
+
+.tb-promo-fcard:nth-child(3) {
+  animation: tb-promo-fadeUp 0.6s ease-out 0.5s both;
+}
+
+/* ─── Responsive ─── */
+@media (min-width: 600px) {
+  .tb-promo-features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .tb-promo-hero h1 {
+    font-size: 2.6rem;
+  }
+}
+
+@media (max-width: 599px) {
+  .tb-promo-hero {
+    padding: 56px 20px 48px;
+  }
+
+  .tb-promo-hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .tb-promo-section {
+    padding: 40px 16px;
+  }
+
+  .tb-promo-compare th,
+  .tb-promo-compare td {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+  }
+
+  .tb-promo-compare th:first-child {
+    width: 70px;
+  }
+
+  .tb-flow-row {
+    gap: 8px;
+  }
+
+  .tb-flow-node {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+
+  .tb-flow-node.table {
+    padding: 10px 16px;
+    font-size: 0.82rem;
+  }
+}

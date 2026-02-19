@@ -1330,53 +1330,186 @@ function LoginModal({ message, onClose }: { message: string; onClose: () => void
 
 function PromoPage() {
   return (
-    <div className="promo-page">
-      {/* Hero Section */}
-      <section className="promo-hero">
-        <div className="promo-hero-badge">🎓 학생 전용 학습 플랫폼</div>
-        <h1 className="promo-hero-title">
-          나의 수업,
-          <br />
-          <span className="promo-hero-accent">한눈에 관리하세요</span>
-        </h1>
-        <p className="promo-hero-description">
-          TutorBoard와 함께 수업 일정, 과제, 성적을 체계적으로 관리하고
-          <br />
-          선생님·학부모와 실시간으로 소통하세요.
-        </p>
-        <button className="btn btn-login" onClick={() => redirectToLogin()}>
-          🚀 시작하기
-        </button>
-      </section>
-
-      {/* Features Section */}
-      <section className="promo-features">
-        <div className="promo-feature-card">
-          <div className="promo-feature-icon">📅</div>
-          <h3 className="promo-feature-title">수업 일정 관리</h3>
-          <p className="promo-feature-desc">
-            월별·주별·일별 캘린더로 모든 수업 일정을 확인하고 관리합니다.
+    <div className="tb-promo">
+      {/* ───── Hero Section ───── */}
+      <section className="tb-promo-hero">
+        <div className="tb-promo-hero-inner">
+          <div className="tb-promo-hero-badge">📋 3자 공유 수업 관리 플랫폼</div>
+          <h1>
+            선생님·학생·학부모
+            <br />
+            <span className="accent">수업현황을 함께 공유하세요</span>
+          </h1>
+          <p className="tb-promo-hero-desc">
+            TutorBoard는 선생님이 기록한 수업현황을 학생과 학부모가
+            <br />
+            실시간으로 열람하고, 코멘트를 남길 수 있는 공유 플랫폼입니다.
           </p>
-        </div>
-        <div className="promo-feature-card">
-          <div className="promo-feature-icon">📝</div>
-          <h3 className="promo-feature-title">과제 & 성적 추적</h3>
-          <p className="promo-feature-desc">
-            과제 제출 현황과 성적 피드백을 실시간으로 확인할 수 있습니다.
-          </p>
-        </div>
-        <div className="promo-feature-card">
-          <div className="promo-feature-icon">💬</div>
-          <h3 className="promo-feature-title">선생님·학부모 소통</h3>
-          <p className="promo-feature-desc">
-            수업별 코멘트와 계정 연동으로 원활한 소통이 가능합니다.
-          </p>
+          <button className="tb-promo-hero-cta" onClick={() => redirectToLogin()}>
+            🚀 시작하기
+          </button>
         </div>
       </section>
 
-      {/* Footer */}
-      <div className="promo-footer">
-        <p>© 2026 TutorBoard. 더 나은 학습을 위한 첫 걸음.</p>
+      {/* ───── Comparison Table ───── */}
+      <section className="tb-promo-section">
+        <div className="tb-promo-section-title">📊 StudyPlanner vs TutorBoard</div>
+        <p className="tb-promo-section-sub">개인 학습 관리와 3자 공유 수업 관리, 무엇이 다를까요?</p>
+
+        <div className="tb-promo-compare">
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>StudyPlanner</th>
+                <th>TutorBoard</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>목적</td>
+                <td>학생 개인 수업일정 기록</td>
+                <td>선생님·학생·학부모 3자 수업현황 공유</td>
+              </tr>
+              <tr>
+                <td>데이터 소유</td>
+                <td>학생이 직접 입력</td>
+                <td>선생님이 수업현황 기록, 모든 참여자가 열람</td>
+              </tr>
+              <tr>
+                <td>계정 구조</td>
+                <td>단일 사용자</td>
+                <td>선생님↔학생↔학부모 계정 연결</td>
+              </tr>
+              <tr>
+                <td>핵심 기능</td>
+                <td>개인 일정 관리</td>
+                <td>수업현황 테이블 (3자 공유)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* ───── 3자 공유 원리 ───── */}
+      <section className="tb-promo-section">
+        <div className="tb-promo-section-title">🔄 3자 공유 수업현황 테이블 원리</div>
+        <p className="tb-promo-section-sub">선생님이 기록하고, 학생과 학부모가 함께 열람합니다</p>
+
+        <div className="tb-promo-flow">
+          <div className="tb-promo-flow-title">데이터 흐름</div>
+
+          <div className="tb-flow-diagram">
+            {/* Row 1: 선생님 → 수업현황 테이블 */}
+            <div className="tb-flow-row">
+              <div className="tb-flow-node teacher">📖 선생님</div>
+              <div className="tb-flow-connector">
+                <span className="tb-flow-arrow">→</span>
+                <span className="tb-flow-arrow-label">수업현황 기록</span>
+              </div>
+              <div className="tb-flow-node table">📋 수업현황 테이블</div>
+            </div>
+
+            {/* Row 2: 선생님 → 초대링크 → 계정연결 */}
+            <div className="tb-flow-row">
+              <div className="tb-flow-node teacher">📖 선생님</div>
+              <div className="tb-flow-connector">
+                <span className="tb-flow-arrow">→</span>
+                <span className="tb-flow-arrow-label">초대 링크 생성</span>
+              </div>
+              <div className="tb-flow-node link">🔗 계정연결</div>
+              <div className="tb-flow-connector">
+                <span className="tb-flow-arrow">←</span>
+                <span className="tb-flow-arrow-label">링크 수락</span>
+              </div>
+              <div className="tb-flow-node student">🎓 학생</div>
+            </div>
+
+            {/* Row 3: 학부모 → 링크 수락 → 계정연결 */}
+            <div className="tb-flow-row">
+              <div className="tb-flow-node parent">👩 학부모</div>
+              <div className="tb-flow-connector">
+                <span className="tb-flow-arrow">→</span>
+                <span className="tb-flow-arrow-label">링크 수락</span>
+              </div>
+              <div className="tb-flow-node link">🔗 계정연결</div>
+              <div className="tb-flow-connector">
+                <span className="tb-flow-arrow">→</span>
+                <span className="tb-flow-arrow-label">연결 완료</span>
+              </div>
+              <div className="tb-flow-node table">📋 수업현황 테이블</div>
+            </div>
+
+            {/* Row 4: 학생·학부모 → 열람 + 코멘트 */}
+            <div className="tb-flow-row">
+              <div className="tb-flow-node student">🎓 학생</div>
+              <span className="tb-flow-arrow">+</span>
+              <div className="tb-flow-node parent">👩 학부모</div>
+              <div className="tb-flow-connector">
+                <span className="tb-flow-arrow">→</span>
+                <span className="tb-flow-arrow-label">열람 + 코멘트</span>
+              </div>
+              <div className="tb-flow-node table">📋 수업현황 테이블</div>
+            </div>
+          </div>
+
+          {/* Flow 설명 */}
+          <div className="tb-flow-desc">
+            <div className="tb-flow-desc-item">
+              <span className="tb-flow-desc-icon">📖</span>
+              <div className="tb-flow-desc-text">
+                <strong>선생님</strong>이 수업 내용, 출결, 과제, 테스트 결과를 기록하면 수업현황 테이블에 자동 반영됩니다.
+              </div>
+            </div>
+            <div className="tb-flow-desc-item">
+              <span className="tb-flow-desc-icon">🔗</span>
+              <div className="tb-flow-desc-text">
+                선생님이 <strong>초대 링크</strong>를 생성하여 학생·학부모에게 전달하면, 링크 수락으로 계정이 연결됩니다.
+              </div>
+            </div>
+            <div className="tb-flow-desc-item">
+              <span className="tb-flow-desc-icon">💬</span>
+              <div className="tb-flow-desc-text">
+                연결된 <strong>학생과 학부모</strong>는 수업현황을 열람하고, 각 수업별로 코멘트를 남길 수 있습니다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ───── Feature Cards ───── */}
+      <section className="tb-promo-section">
+        <div className="tb-promo-section-title">✨ 핵심 기능</div>
+        <p className="tb-promo-section-sub">TutorBoard가 제공하는 3자 공유 기능</p>
+
+        <div className="tb-promo-features">
+          <div className="tb-promo-fcard" style={{ '--fcard-color': '#f59e0b', '--fcard-bg': 'rgba(245,158,11,0.1)' } as React.CSSProperties}>
+            <div className="tb-promo-fcard-icon">📋</div>
+            <h3>수업현황 테이블</h3>
+            <p>
+              날짜별 수업 내용, 출결 상태, 과제 결과, 테스트 점수를 한눈에 확인할 수 있는 공유 테이블입니다.
+            </p>
+          </div>
+          <div className="tb-promo-fcard" style={{ '--fcard-color': '#8b5cf6', '--fcard-bg': 'rgba(139,92,246,0.1)' } as React.CSSProperties}>
+            <div className="tb-promo-fcard-icon">🔗</div>
+            <h3>계정 연동</h3>
+            <p>
+              초대 링크 하나로 선생님↔학생↔학부모 계정을 연결. 연동된 모든 참여자가 수업현황을 공유합니다.
+            </p>
+          </div>
+          <div className="tb-promo-fcard" style={{ '--fcard-color': '#ec4899', '--fcard-bg': 'rgba(236,72,153,0.1)' } as React.CSSProperties}>
+            <div className="tb-promo-fcard-icon">💬</div>
+            <h3>3자 코멘트</h3>
+            <p>
+              각 수업별로 선생님·학생·학부모가 코멘트를 남기며 실시간으로 소통할 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ───── Footer ───── */}
+      <div className="tb-promo-footer">
+        <p>© 2026 TutorBoard. 선생님·학생·학부모가 함께하는 수업 관리.</p>
       </div>
     </div>
   )
