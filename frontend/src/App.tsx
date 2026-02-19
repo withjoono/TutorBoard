@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { processSSOLogin, isLoggedIn, redirectToLogin, logout, getUserRole } from './lib/auth'
+import { processSSOLogin, isLoggedIn, redirectToLogin, logout, getUserRole, getUserInfo } from './lib/auth'
 import { api } from './lib/api'
 import { hubApi } from './lib/hub-api'
 import TeacherDashboard from './TeacherDashboard'
@@ -412,19 +412,33 @@ function ProgressBar({ value, label }: { value: number; label: string }) {
 // ... (types)
 
 function DashboardPage() {
-  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [lessons, setLessons] = useState<LessonEvent[]>(MOCK_LESSONS);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        const studentId = user.id || 'student-uuid-1';
+        const userInfo = getUserInfo();
+        const studentId = userInfo?.id;
 
-        const data = await api.get(`/dashboard/student/${studentId}`);
-        setDashboardData(data);
+        if (studentId) {
+          const data = await api.get<any>(`/dashboard/student/${studentId}`);
+          if (data?.upcomingLessons?.length) {
+            setLessons(data.upcomingLessons.map((l: any) => ({
+              id: l.id,
+              title: l.title,
+              subject: l.subject || '기타',
+              date: l.date.split('T')[0],
+              startTime: l.startTime,
+              endTime: l.endTime,
+              color: l.color || SUBJECT_COLORS[l.subject] || '#888',
+              teacher: l.teacher,
+              classId: l.classId
+            })));
+          }
+        }
       } catch (e) {
-        console.error(e);
+        console.warn('[Dashboard] API failed, using mock data:', e);
       } finally {
         setLoading(false);
       }
@@ -432,25 +446,12 @@ function DashboardPage() {
     load();
   }, []);
 
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
-  if (!dashboardData) return <div className="p-8 text-center text-red-500">Failed to load data</div>;
-
-  const lessons = dashboardData.upcomingLessons?.map((l: any) => ({
-    id: l.id,
-    title: l.title,
-    subject: l.subject || '기타',
-    date: l.date.split('T')[0],
-    startTime: l.startTime,
-    endTime: l.endTime,
-    color: l.color || SUBJECT_COLORS[l.subject] || '#888',
-    teacher: l.teacher,
-    classId: l.classId
-  })) || [];
+  if (loading) return <div className="empty-state"><div className="empty-icon">⏳</div></div>;
 
   // Subject distribution
-  const subjectDistribution = useMemo(() => {
+  const subjectDistribution = lessons.length > 0 ? (() => {
     const map: Record<string, number> = {}
-    lessons.forEach((l: any) => {
+    lessons.forEach((l) => {
       const mins = getMinuteDuration(l.startTime, l.endTime)
       map[l.subject] = (map[l.subject] || 0) + mins
     })
@@ -463,7 +464,7 @@ function DashboardPage() {
         percentage: total > 0 ? Math.round((minutes / total) * 100) : 0,
       }))
       .sort((a, b) => b.minutes - a.minutes)
-  }, [lessons])
+  })() : [];
 
   return (
     <div>
@@ -476,12 +477,14 @@ function DashboardPage() {
       <LessonCalendar lessons={lessons} />
 
       {/* Subject Distribution Chart */}
-      <div style={{ marginTop: 24 }}>
-        <div className="section-title">📊 교과별 수업 비중</div>
-        <div className="card">
-          <DonutChart data={subjectDistribution} />
+      {subjectDistribution.length > 0 && (
+        <div style={{ marginTop: 24 }}>
+          <div className="section-title">📊 교과별 수업 비중</div>
+          <div className="card">
+            <DonutChart data={subjectDistribution} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
