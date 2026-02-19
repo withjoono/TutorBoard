@@ -5,6 +5,7 @@ import { hubApi } from './lib/hub-api'
 import TeacherDashboard from './TeacherDashboard'
 import ParentDashboard from './ParentDashboard'
 import './index.css'
+import { WonCircle } from './components/icons'
 
 // ===== TYPES =====
 
@@ -1484,8 +1485,9 @@ function App() {
               // TODO: navigate to payment
             }}
             title="결제"
+            style={{ color: 'var(--color-primary)' }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
+            <WonCircle width={18} height={18} />
           </button>
           {/* 알림 */}
           <button
