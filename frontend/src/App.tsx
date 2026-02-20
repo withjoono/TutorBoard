@@ -1027,6 +1027,24 @@ function AccountLinkagePage() {
   const [linksLoading, setLinksLoading] = useState(true)
   const [unlinkingId, setUnlinkingId] = useState<number | null>(null)
 
+  // ===== 교과/과목 선택 states =====
+  const [kyokwaList, setKyokwaList] = useState<Array<{ kyokwa: string; kyokwaCode: string }>>([])
+  const [subjectList, setSubjectList] = useState<Array<{ id: string; subjectName: string; subjectCode: number; classification: string }>>([])
+  const [selectedKyokwa, setSelectedKyokwa] = useState('')
+  const [selectedKyokwaName, setSelectedKyokwaName] = useState('')
+  const [selectedSubject, setSelectedSubject] = useState('')
+  const [selectedSubjectName, setSelectedSubjectName] = useState('')
+  const [kyokwaLoading, setKyokwaLoading] = useState(false)
+  const [subjectLoading, setSubjectLoading] = useState(false)
+
+  // 사용자 ID 기반 교육과정 판별: 26H3, 26H4, 26H0 포함 → 2015, 그 외 → 2022
+  const userInfo = getUserInfo()
+  const curriculumType = useMemo(() => {
+    const userId = userInfo?.id || ''
+    if (/26H[034]/.test(userId)) return '2015'
+    return '2022'
+  }, [userInfo?.id])
+
   const hubUrl = import.meta.env.VITE_HUB_URL || 'http://localhost:3000'
 
   const fetchLinkedAccounts = async () => {
@@ -1041,8 +1059,37 @@ function AccountLinkagePage() {
     }
   }
 
+  // 교과 목록 로드
+  const fetchKyokwaList = async () => {
+    try {
+      setKyokwaLoading(true)
+      const result = await hubApi.get<Array<{ kyokwa: string; kyokwaCode: string }>>(`/kyokwa-subjects?curriculum=${curriculumType}`)
+      setKyokwaList(Array.isArray(result) ? result : [])
+    } catch (err) {
+      console.error('[교과목] 교과 목록 조회 실패:', err)
+    } finally {
+      setKyokwaLoading(false)
+    }
+  }
+
+  // 과목 목록 로드 (교과 선택 시)
+  const fetchSubjectList = async (kyokwaCode: string) => {
+    try {
+      setSubjectLoading(true)
+      const result = await hubApi.get<Array<{ id: string; subjectName: string; subjectCode: number; classification: string }>>(
+        `/kyokwa-subjects/${kyokwaCode}/subjects?curriculum=${curriculumType}`
+      )
+      setSubjectList(Array.isArray(result) ? result : [])
+    } catch (err) {
+      console.error('[교과목] 과목 목록 조회 실패:', err)
+    } finally {
+      setSubjectLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetchLinkedAccounts()
+    fetchKyokwaList()
   }, [])
 
   const groupedAccounts = useMemo(() => {
@@ -1062,10 +1109,30 @@ function AccountLinkagePage() {
     return groups
   }, [linkedAccounts])
 
+  const handleKyokwaSelect = (kyokwaCode: string, kyokwaName: string) => {
+    setSelectedKyokwa(kyokwaCode)
+    setSelectedKyokwaName(kyokwaName)
+    setSelectedSubject('')
+    setSelectedSubjectName('')
+    setSubjectList([])
+    fetchSubjectList(kyokwaCode)
+  }
+
+  const handleSubjectSelect = (subjectId: string, subjectName: string) => {
+    setSelectedSubject(subjectId)
+    setSelectedSubjectName(subjectName)
+  }
+
   const handleCreateInvite = async () => {
     setInviteLoading(true)
     try {
-      const result = await hubApi.post<{ code: string }>('/mentoring/invite')
+      const result = await hubApi.post<{ code: string }>('/mentoring/invite', {
+        kyokwa: selectedKyokwaName,
+        kyokwaCode: selectedKyokwa,
+        subject: selectedSubjectName,
+        subjectId: selectedSubject,
+        curriculum: curriculumType,
+      })
       if (result?.code) {
         setInviteCode(result.code)
         setCopied(false)
@@ -1120,20 +1187,140 @@ function AccountLinkagePage() {
           color: 'var(--color-text-muted)',
           lineHeight: 1.7,
         }}>
-          <p>1. 아래 버튼을 눌러 초대 링크를 생성합니다.</p>
-          <p>2. 생성된 링크를 카톡이나 문자로 상대에게 보냅니다.</p>
-          <p>3. 상대가 링크를 클릭하면 계정이 연동됩니다.</p>
+          <p>1. 교과와 과목을 선택합니다.</p>
+          <p>2. 아래 버튼을 눌러 초대 링크를 생성합니다.</p>
+          <p>3. 생성된 링크를 카톡이나 문자로 상대에게 보냅니다.</p>
+          <p>4. 상대가 링크를 클릭하면 계정이 연동됩니다.</p>
           <p style={{ color: 'var(--color-accent)', fontWeight: 600 }}>※ 링크는 24시간 동안 유효합니다.</p>
+        </div>
+
+        {/* ===== 교과/과목 선택 드롭다운 ===== */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{
+            fontSize: '0.8rem',
+            fontWeight: 600,
+            color: 'var(--color-text-muted)',
+            marginBottom: 8,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+          }}>
+            📚 교육과정: <span style={{
+              backgroundColor: curriculumType === '2015' ? '#f59e0b20' : '#3b82f620',
+              color: curriculumType === '2015' ? '#d97706' : '#2563eb',
+              padding: '2px 10px',
+              borderRadius: 12,
+              fontWeight: 700,
+              fontSize: '0.78rem',
+            }}>{curriculumType} 교육과정</span>
+          </div>
+
+          {/* 교과 선택 */}
+          <div style={{ marginBottom: 12 }}>
+            <label style={{
+              display: 'block',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              color: 'var(--color-text)',
+              marginBottom: 6,
+            }}>① 교과 선택</label>
+            {kyokwaLoading ? (
+              <div style={{ padding: '10px 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>⏳ 교과 목록 불러오는 중...</div>
+            ) : (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {kyokwaList.map(k => (
+                  <button
+                    key={k.kyokwaCode}
+                    onClick={() => handleKyokwaSelect(k.kyokwaCode, k.kyokwa)}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: 20,
+                      border: selectedKyokwa === k.kyokwaCode ? '2px solid var(--color-primary)' : '1px solid var(--color-border)',
+                      backgroundColor: selectedKyokwa === k.kyokwaCode ? 'var(--color-primary)' : 'var(--color-surface)',
+                      color: selectedKyokwa === k.kyokwaCode ? '#fff' : 'var(--color-text)',
+                      fontSize: '0.82rem',
+                      fontWeight: selectedKyokwa === k.kyokwaCode ? 700 : 500,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {k.kyokwa}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 과목 선택 */}
+          {selectedKyokwa && (
+            <div style={{ marginBottom: 4 }}>
+              <label style={{
+                display: 'block',
+                fontSize: '0.82rem',
+                fontWeight: 600,
+                color: 'var(--color-text)',
+                marginBottom: 6,
+              }}>② 과목 선택</label>
+              {subjectLoading ? (
+                <div style={{ padding: '10px 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>⏳ 과목 목록 불러오는 중...</div>
+              ) : subjectList.length > 0 ? (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {subjectList.map(s => (
+                    <button
+                      key={s.id}
+                      onClick={() => handleSubjectSelect(s.id, s.subjectName)}
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: 16,
+                        border: selectedSubject === s.id ? '2px solid var(--color-primary)' : '1px solid var(--color-border)',
+                        backgroundColor: selectedSubject === s.id ? 'var(--color-primary)' : 'var(--color-surface)',
+                        color: selectedSubject === s.id ? '#fff' : 'var(--color-text)',
+                        fontSize: '0.8rem',
+                        fontWeight: selectedSubject === s.id ? 700 : 400,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {s.subjectName}
+                      <span style={{
+                        display: 'inline-block',
+                        marginLeft: 4,
+                        fontSize: '0.7rem',
+                        opacity: 0.6,
+                      }}>({s.classification})</span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ padding: '10px 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>해당 교과에 등록된 과목이 없습니다.</div>
+              )}
+            </div>
+          )}
+
+          {/* 선택 요약 */}
+          {selectedKyokwaName && selectedSubjectName && (
+            <div style={{
+              marginTop: 12,
+              padding: '10px 14px',
+              borderRadius: 10,
+              backgroundColor: 'var(--color-primary)' + '10',
+              border: '1px solid var(--color-primary)' + '30',
+              fontSize: '0.83rem',
+              color: 'var(--color-text)',
+            }}>
+              ✅ <strong>{selectedKyokwaName}</strong> &gt; <strong>{selectedSubjectName}</strong> 선택됨
+            </div>
+          )}
         </div>
 
         {!inviteCode ? (
           <button
             className="btn btn-primary"
             onClick={handleCreateInvite}
-            disabled={inviteLoading}
-            style={{ width: '100%' }}
+            disabled={inviteLoading || !selectedSubject}
+            style={{ width: '100%', opacity: !selectedSubject ? 0.5 : 1 }}
           >
-            {inviteLoading ? '⏳ 생성 중...' : '🔗 초대 링크 생성하기'}
+            {inviteLoading ? '⏳ 생성 중...' : !selectedSubject ? '📚 교과/과목을 먼저 선택하세요' : '🔗 초대 링크 생성하기'}
           </button>
         ) : (
           <div>
@@ -1284,7 +1471,7 @@ function AccountLinkagePage() {
           </div>
         )}
       </div>
-    </div>
+    </div >
   )
 }
 
