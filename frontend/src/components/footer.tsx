@@ -7,12 +7,12 @@ export const Footer = () => {
             <div className="mx-auto w-full max-w-screen-lg px-6">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr_auto] sm:gap-10">
                     <div className="flex flex-col items-center sm:items-start gap-3">
-                        <img className="h-auto w-16 sm:w-20 rounded-xl" src="/logo.png" alt="거북스쿨 로고" />
-                        <span className="text-base sm:text-lg font-semibold">{"(주)거북스쿨"}</span>
+                        <img className="h-auto w-16 sm:w-20 rounded-xl" src="/logo.png" alt="G Skool 로고" />
+                        <span className="text-base sm:text-lg font-semibold">{"(주)G Skool"}</span>
                     </div>
                     <div className="flex flex-col gap-3 text-center">
                         <div className="flex flex-col gap-1 text-xs text-gray-500 sm:text-sm">
-                            <span>사업체명 (주)거북스쿨 | 대표 강준호</span>
+                            <span>사업체명 (주)G Skool | 대표 강준호</span>
                             <span>사업자등록번호 772-87-02782 | 연락처 042-484-3356</span>
                             <span>서울시 성북구 화랑로 211 성북구 기술창업센터 105호</span>
                         </div>
@@ -34,7 +34,7 @@ export const Footer = () => {
                     </div>
                 </div>
                 <div className="border-t border-gray-200 pt-2 text-center text-xs text-gray-400">
-                    © {new Date().getFullYear()} (주)거북스쿨. All rights reserved.
+                    © {new Date().getFullYear()} (주)G Skool. All rights reserved.
                 </div>
             </div>
         </div>
